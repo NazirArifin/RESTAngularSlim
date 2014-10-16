@@ -3,7 +3,7 @@
 /** tooltips **/
 app.directive('tooltips', function() {
 	return {
-		restrict: 'AC',
+		restrict: 'CA',
 		link: function($scope, elm, attrs) { 
 			return attrs.$observe('title', function(v) {
 				elm.tooltip({ placement: (attrs.placement || 'top') }); 
@@ -17,7 +17,7 @@ app.directive('tooltips', function() {
  */
 app.directive('popovers', function() {
 	return {
-		restrict: 'AC',
+		restrict: 'CA',
 		link: function($scope, elm, attrs) {
 			return attrs.$observe('content', function(v) {
 				elm.popover({
