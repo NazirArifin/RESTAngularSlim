@@ -6,7 +6,7 @@
  */
 $app->options('/', function() use($app) { $app->status(200); $app->stop(); });
 $app->get('/', function() use($app, $ctr) {
-	$ctr->load('model', 'admin_mains');
+	$ctr->load('model', 'admin_main');
 	$r = $ctr->AdminMainModel->cds();
 	$ctr->load('view', 'index.html', array(
 		'greeting' 	=> 'Hai.. selamat datang!',
