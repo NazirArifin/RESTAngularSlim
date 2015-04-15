@@ -3,7 +3,7 @@
 $dbconfig_host = 'localhost';
 
 // The database name to use
-$dbconfig_database = 'abm';
+$dbconfig_database = 'cdcol';
 
 // The database authentication user
 $dbconfig_username = 'root';
