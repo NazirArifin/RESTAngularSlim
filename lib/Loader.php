@@ -36,6 +36,7 @@ class Loader {
 	public function controller() {
 		// set timezone
 		date_default_timezone_set('Asia/Jakarta');
+		
 		// max execution time
 		@set_time_limit(300);
 		
@@ -65,11 +66,6 @@ class Loader {
 		$this->app->notFound(function() use ($twig) {
 			print $twig->render('404.html', array());
 		});
-		// custom 500
-		/* $this->app->error(function() {
-			// custom error_get_last
-		}); */
-		
 		// controller file
 		foreach (scandir('controller') as $file) {
 			if (is_file('controller/' . $file)) {
@@ -145,8 +141,7 @@ class Loader {
 	protected function model($m) {
 		$model = 'model/' . $m . '_model.php';
 		if ( ! is_file($model)) {
-			$this->app->halt(500, 'Cant load Model');
-			$this->app->stop();
+			$this->app->error();
 		}
 		require_once 'model/ModelBase.php';
 		require_once $model;
