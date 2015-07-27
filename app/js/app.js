@@ -17,7 +17,7 @@ config(function($routeProvider, $httpProvider) {
 run(['$rootScope', '$location', function($rootScope, $location) {
 	// server url
 	var protocol 	= 'http',
-		host		= 'server.me',
+		host		= 'localhost',
 		port		= '80';
 	$rootScope.server = protocol + '://' + host + (port != '80' ? ':' + port : '');
 	
