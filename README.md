@@ -1,4 +1,4 @@
-<h1>TwistAngular<h1>
+<h1>TwistAngular</h1>
 
 <p>Bootstrap aplikasi berbasis REST menggunakan komponen sebagai berikut:</p>
 

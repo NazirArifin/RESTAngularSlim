@@ -9,6 +9,10 @@ class MainModel extends ModelBase {
 		parent::__construct();
 	}
 	
-	
+	public function get_cds() {
+		$r = array();
+		
+		return $r;
+	}
 }
 
