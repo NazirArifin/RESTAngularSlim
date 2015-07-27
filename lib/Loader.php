@@ -6,20 +6,6 @@
 namespace Lib;
 
 class Loader {
-	/**
-	 * Folder atau direktori view
-	 */
-	private $direktori = '';
-	
-	/**
-	 * Cache view
-	 */
-	private $cache = FALSE;
-	
-	// ----------------------------------------------------------------------------------------
-	/**
-	 * Jangan diedit setelah bagian ini
-	 */
 	private function __construct() {}
 	private static $instance;
 	public static function get_instance() {
@@ -31,21 +17,23 @@ class Loader {
 	}
 	
 	/**
+	 * Cache view
+	 */
+	private $cache_view = false;
+	
+	/**
 	 * Load controller dan router
 	 */
 	public function controller() {
 		// set timezone
 		date_default_timezone_set('Asia/Jakarta');
 		
-		// max execution time
-		@set_time_limit(300);
-		
 		// twig template
 		require_once 'lib/Twig/Autoloader.php';
 		\Twig_Autoloader::register();
 		
 		$view = 'view' . ( ! empty($this->direktori) ? '/' . $this->direktori : '');
-		if ($this->cache) {
+		if ($this->cache_view) {
 			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view), array(
 				'cache' => 'config/cache'
 			));
@@ -66,6 +54,7 @@ class Loader {
 		$this->app->notFound(function() use ($twig) {
 			print $twig->render('404.html', array());
 		});
+		
 		// controller file
 		foreach (scandir('controller') as $file) {
 			if (is_file('controller/' . $file)) {
@@ -109,28 +98,20 @@ class Loader {
 	/**
 	 * Load interface
 	 */
-	public function load() {
-		switch (func_num_args()) {
-			case 2:
-				$param = func_get_arg(1);
-				switch (func_get_arg(0)) {
-					case 'model':
-						$m = $this->model($param);
-						$this->$m[0] = $m[1];
-						break;
-					case 'helper':
-						$this->helper($param);
-						break;
-					case 'file':
-						$this->file($param);
-						break;
-					case 'view':
-						$this->view($param, array());
-						break;
-				}
+	public function load($type, $param, $param2 = null) {
+		switch ($type) {
+			case 'model':
+				$m = $this->model($param);
+				$this->$m[0] = $m[1];
 				break;
-			case 3:
-				$this->view(func_get_arg(1), func_get_arg(2));
+			case 'helper':
+				$this->helper($param);
+				break;
+			case 'file':
+				$this->file($param);
+				break;
+			case 'view':
+				$this->view($param, $param2);
 				break;
 		}
 	}
@@ -141,13 +122,13 @@ class Loader {
 	protected function model($m) {
 		$model = 'model/' . $m . '_model.php';
 		if ( ! is_file($model)) {
-			$this->app->error();
+			$this->app->halt(500, 'Cant load Model');
+			$this->app->stop();
 		}
 		require_once 'model/ModelBase.php';
 		require_once $model;
-		$m = str_replace(' ', '', ucwords(str_replace('_', ' ', $m)));
-		$class = '\\Model\\' . $m . 'Model';
-		return array($m . 'Model', new $class);
+		$class = '\\Model\\' . ucfirst($m) . 'Model';
+		return array(ucfirst($m) . 'Model', new $class);
 	}
 	
 	/**
@@ -167,7 +148,7 @@ class Loader {
 	/**
 	 * Load View
 	 */
-	protected function view($v, $p = array()) {
+	protected function view($v, $p) {
 		print $this->twig->render($v, $p);
 	}
 }
