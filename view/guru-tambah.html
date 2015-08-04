@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en" data-ng-app="twista" data-ng-controller="MainCtrl" id="twista">
+<head>
+	<meta charset="UTF-8">
+	<title>AMSD &mdash; {{mode}} Guru</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	{% include 'prepage.html' %}
+</head>
+<body material-init>
+	
+	{% if mode == 'Edit' %}
+		{% autoescape false %}
+<script>
+window.guru = {{guru|json_encode()}};
+</script>
+		{% endautoescape %}
+	{% endif %}
+	
+	<div class="container shadow-z-2" style="background-color: #fafafa; margin-top: 10px; border-radius: 2px;">
+		
+		{% include 'header.html' %}
+		
+		<div class="row">
+			<div class="col-sm-12">
+				<ol class="breadcrumb" style="margin-top: 15px">
+					<li class="bold"><a href="/home">Beranda</a></li>
+					<li class="bold"><a href="/guru">Data Guru</a></li>
+					<li class="active">{{mode}} Guru</li>
+				</ol>
+			</div>
+		</div>
+		<div class="row content">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-md-9">
+						<div class="panel panel-default">
+							<div class="panel-body" data-ng-controller="GuruTambahCtrl">
+								<!-- tambah: guru/tambah, edit: guru/:id -->
+								<form action="/guru/{% if mode == 'Edit' %}{{guru.id}}{% else %}tambah{% endif %}" name="formGuru" method="post" class="form-horizontal" novalidate>
+									<fieldset>
+										<legend>Data Guru</legend>
+										<div class="form-group">
+											<label for="kepsek" class="col-md-4 control-label">Kepala Sekolah *</label>
+											<div class="col-md-4">
+												<div class="checkbox" style="padding-top:3px">
+													<label><input type="checkbox" name="kepsek" id="kepsek" data-ng-model="guru.kepsek"></label>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" name="id" data-ng-model="guru.id">
+										<div class="form-group" data-ng-class="{ 'has-error': formGuru.nama.$invalid && ! formGuru.nama.$pristine }">
+											<label for="nama" class="col-md-4 control-label">Nama Guru *</label>
+											<div class="col-md-5">
+												<input type="text" name="nama" id="nama" maxlength="50" data-ng-minlength="3" class="form-control" placeholder="Nama Guru" data-ng-model="guru.nama" data-ng-change="getUsername()" required>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="jenis" class="col-md-4 control-label">Jenis *</label>
+											<div class="col-md-3">
+												<select name="jenis" id="jenis" class="form-control" data-ng-model="guru.jenis" required>
+													<option value="1">PNS</option>
+													<option value="2">Bantu/Honorer</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group" data-ng-hide="guru.jenis == 2">
+											<label for="nip" class="col-md-4 control-label">NIP</label>
+											<div class="col-md-4">
+												<input type="text" name="nip" id="nip" class="form-control" placeholder="NIP" maxlength="30" number-input data-ng-model="guru.nip">
+											</div>
+										</div>
+										<div class="form-group" data-ng-hide="guru.jenis == 2">
+											<label for="golongan" class="col-md-4 control-label">Golongan</label>
+											<div class="col-md-3">
+												<select name="golongan" id="golongan" class="form-control" data-ng-model="guru.golongan">
+													<option value="">-- pilih golongan --</option>
+													{% for c in golongan %}
+													<option value="{{c.id}}">{{c.nama}}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="" class="col-md-4 control-label">Jenis Kelamin *</label>
+											<div class="col-md-8">
+												<label class="radio-inline">
+													<input type="radio" name="jk" id="" value="l" data-ng-model="guru.jk"> Laki-laki
+												</label> &nbsp; 
+												<label class="radio-inline">
+													<input type="radio" name="jk" id="" value="p" data-ng-model="guru.jk"> Perempuan
+												</label>
+											</div>
+										</div>
+										<!--
+										<div class="form-group">
+											<label for="agama" class="col-md-4 control-label">Agama *</label>
+											<div class="col-md-4">
+												<select name="agama" id="agama" class="form-control" data-ng-model="guru.agama" required>
+													{% for c in agama %}
+													<option value="{{c.id}}">{{c.nama}}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+										-->
+										<input type="hidden" name="agama" value="1">
+										<div class="form-group" data-ng-class="{ 'has-error': formGuru.alamat.$invalid && ! formGuru.alamat.$pristine }">
+											<label for="alamat" class="col-md-4 control-label">Alamat *</label>
+											<div class="col-md-7">
+												<input type="text" name="alamat" id="alamat" class="form-control" placeholder="Alamat Guru" maxlength="80" data-hint="tulis alamat lengkap guru" data-ng-model="guru.alamat" data-ng-minlength="8" required>
+											</div>
+										</div>
+										<div class="form-group" data-ng-class="{ 'has-error': formGuru.telepon.$invalid && ! formGuru.telepon.$pristine }" >
+											<label for="telepon" class="col-md-4 control-label">Telepon *</label>
+											<div class="col-md-3">
+												<input type="text" name="telepon" id="telepon" class="form-control" placeholder="" masked-input="+62-99999?999999" data-ng-model="guru.telepon" data-ng-minlength="9" required>
+											</div>
+										</div>
+									</fieldset>
+									
+									{% if mode == 'Tambah' %}
+									<fieldset>
+										<legend>Data Pengguna</legend>
+										<div class="form-group" data-ng-class="{ 'has-error': formGuru.username.$invalid && ! formGuru.username.$pristine }">
+											<label for="username" class="col-md-4 control-label">Usename *</label>
+											<div class="col-md-3">
+												<input type="text" name="username" id="username" class="form-control" placeholder="USERNAME" maxlength="20" data-ng-model="guru.username" data-ng-minlength="4" data-hint="minimal 4 karakter" required>
+											</div>
+										</div>
+										<div class="form-group" data-ng-class="{ 'has-error': formGuru.password.$invalid && ! formGuru.password.$pristine }">
+											<label for="password" class="col-md-4 control-label">Password *</label>
+											<div class="col-md-3">
+												<input type="text" name="password" id="password" class="form-control" placeholder="PASSWORD" maxlength="30" data-hint="minimal 6 karakter" data-ng-model="guru.password" data-ng-minlength="6" required>
+											</div>
+										</div>
+										<div class="form-group" data-ng-class="{ 'has-error': (formGuru.password2.$invalid && ! formGuru.password2.$pristine) || guru.password != guru.password2 }">
+											<label for="password2" class="col-md-4 control-label">Ulangi Password *</label>
+											<div class="col-md-3">
+												<input type="text" name="password2" id="password2" class="form-control" placeholder="PASSWORD" maxlength="30" data-hint="ketik ulang password" data-ng-model="guru.password2" data-ng-minlength="6" required>
+											</div>
+										</div>
+									</fieldset>
+									{% endif %}
+									
+									<fieldset>
+										<legend>Selesai dan Simpan</legend>
+										<div class="col-md-6 col-md-offset-4">
+											<button class="btn btn-primary btn-raised" data-ng-disabled="formGuru.$invalid"><i class="mdi-action-done"></i>SIMPAN</button> 
+											<a href="/guru" class="btn btn-flat">BATALKAN</a>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<p class="text-center"><a href="/guru" class="btn btn-flat">BATALKAN</a></p>
+						<div class="alert alert-info">
+							Pastikan semua data terisi dengan baik dan benar
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		{% include 'footer.html' %}
+	</div>
+	
+	{% include 'postpage.html' %}
+</body>
+</html>

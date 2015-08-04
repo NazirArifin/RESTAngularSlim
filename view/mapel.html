@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-ng-app="twista" data-ng-controller="MainCtrl" id="twista">
+<head>
+	<meta charset="UTF-8">
+	<title>AMSD &mdash; Mata Pelajaran</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	{% include 'prepage.html' %}
+</head>
+<body material-init>
+	
+	<div class="container shadow-z-2" style="background-color: #fafafa; margin-top: 10px; border-radius: 2px;">
+		
+		{% include 'header.html' %}
+		
+		<div class="row">
+			<div class="col-sm-12">
+				<ol class="breadcrumb" style="margin-top: 15px">
+					<li class="bold"><a href="/home">Beranda</a></li>
+					<li class="active">Mata Pelajaran</li>
+				</ol>
+			</div>
+		</div>
+		<div class="row content">
+			<div class="col-md-3">
+				<div class="list-group small" style="margin-top:5px;">
+					<div class="list-group-item">
+						<div class="row-action-primary">
+							<i class="mdi-action-assignment"></i>
+						</div>
+						<div class="row-content">
+							<h4 class="list-group-item-heading">Mata Pelajaran</h4>
+							<p class="small list-group-item-text">Manajemen Mata Pelajaran</p>
+						</div>
+					</div>
+					<div class="list-group-separator"></div>
+					<div class="list-group-item">
+						<a href="">
+						<div class="row-action-primary">
+							<i class="mdi-action-language" style="background-color:#03a9f4"></i>
+						</div>
+						</a>
+						<div class="row-content">
+							<h4 class="list-group-item-heading"><a href="" class="text-info">Muatan Lokal</a></h4>
+							<p class="small list-group-item-text">Manajemen Muatan Lokal</p>
+						</div>
+					</div>
+					<div class="list-group-separator"></div>
+					<div class="list-group-item">
+						<a href="">
+						<div class="row-action-primary">
+							<i class="mdi-action-launch" style="background-color:#03a9f4"></i>
+						</div>
+						</a>
+						<div class="row-content">
+							<h4 class="list-group-item-heading"><a href="" class="text-info">Ekstra Kurikuler</a></h4>
+							<p class="small list-group-item-text">Manajemen Ekstra Kurikuler</p>
+						</div>
+					</div>
+					<div class="list-group-separator"></div>
+					<div class="list-group-item">
+						<a href="">
+						<div class="row-action-primary">
+							<i class="mdi-action-face-unlock" style="background-color:#03a9f4"></i>
+						</div>
+						</a>
+						<div class="row-content">
+							<h4 class="list-group-item-heading"><a href="" class="text-info">Kepribadian</a></h4>
+							<p class="small list-group-item-text">Data Kepribadian</p>
+						</div>
+					</div>
+				</div>
+				<!--
+				<ul class="nav nav-pills nav-stacked">
+					<li><a href=""><i class="mdi-content-send"></i>MATA PELAJARAN</a></li>
+				</ul>
+				-->
+			</div>
+			<div class="col-md-9">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-sm-8"><h2 class="panel-title" style="margin-top:10px;">MATA PELAJARAN</h2></div>
+							<div class="col-sm-4 text-right"><a href="" class="btn btn-raised btn-success" style="margin:0"><i class="mdi-content-add"></i> Tambah</a></div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<form role="form" class="form-horizontal">
+							<div class="form-group">
+								<div class="col-md-4">
+									<p class="form-control-static">Nama Mata Pelajaran</p>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-4">
+									<input class="form-control floating-label" id="focusedInput" type="text" placeholder="Nama Mata Pelajaran">
+								</div>
+								<div class="col-md-1">
+									<input class="form-control floating-label" id="focusedInput" type="text" placeholder="KKM">
+								</div>
+								{% for c in 1..6 %}
+								<div class="col-md-1">
+									<div class="checkbox" style="padding-top:5px">
+                    <label>
+                        <input type="checkbox">
+                    </label>
+                </div>
+									
+								</div>
+								{% endfor %}
+								<div class="col-md-1">
+									<a href="" class="btn btn-sm btn-success" style="margin-top:3px"><span class="fa fa-check"></span></a>
+								</div>
+							</div>
+						</form>
+						
+						<div class="clearfix"></div>
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped table-hover">
+								<thead>
+									<tr>
+										<th rowspan="2" style="vertical-align: middle">NAMA MATA PELAJARAN</th>
+										<th rowspan="2" style="vertical-align: middle">KKM</th>
+										<th colspan="6" class="text-center">KELAS</th>
+										<th rowspan="2">&nbsp;</th>
+									</tr>
+									<tr>
+										<th>1</th>
+										<th>2</th>
+										<th>3</th>
+										<th>4</th>
+										<th>5</th>
+										<th>6</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Pendidikan Agama Islam</td>
+										<td>70</td>
+										<td><i class="fa fa-fw fa-check text-success"></i></td>
+										<td><i class="fa fa-fw fa-check text-success"></i></td>
+										<td><i class="fa fa-fw fa-check text-success"></i></td>
+										<td><i class="fa fa-fw fa-check text-success"></i></td>
+										<td><i class="fa fa-fw fa-times text-danger"></i></td>
+										<td><i class="fa fa-fw fa-check text-success"></i></td>
+										<td>
+											<a data-ng-href="/mapel/{{c.id}}" title="edit" class="tooltips"><i class="fa fa-fw fa-pencil"></i></a> 
+											<a href="" title="hapus" class="tooltips text-danger" delete-button="mapel" data-id="{{c.id}}"><i class="fa fa-fw fa-scissors"></i></a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		{% include 'footer.html' %}
+	</div>
+	
+	{% include 'postpage.html' %}
+</body>
+</html>

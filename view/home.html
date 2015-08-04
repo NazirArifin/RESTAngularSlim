@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-ng-app="twista" data-ng-controller="MainCtrl" id="twista">
+<head>
+	<meta charset="UTF-8">
+	<title>AMSD &mdash; Beranda</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	{% include 'prepage.html' %}
+</head>
+<body material-init style="background: #7f7f7f url(/img/overlays/06.png) repeat;">
+	
+	<div class="container shadow-z-2" style="background-color: #27272F; margin-top: 10px; border-radius: 2px;">
+		<div class="row">
+			<div class="col-sm-12 home-bg shadow-z-1" id="home-title">
+				<div class="row">
+					<div class="col-sm-3 col-md-2 visible-md visible-lg">
+						<p class="text-center"><img src="/img/logo.png" alt="logo"></p>
+					</div>
+					<div class="col-xs-10 col-sm-7 col-md-8">
+						<h3 style="margin-top: 3px">APLIKASI MANAJEMEN SEKOLAH DASAR</h3>
+						<p>{{sekolah.nama}} &mdash; {{sekolah.kabupaten}}</p>
+					</div>
+					<div class="col-xs-2">
+						<p class="text-center"><a href="/logout"><i class="fa fa-fw fa-sign-out"></i>KELUAR</a></p>
+						<p class="text-center versi">v.1.0 beta</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		{% if isadmin %}
+		<div class="row">
+			<div class="col-sm-12 home-bg shadow-z-1" id="home-menu">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/guru"><i class="mdi-action-account-box"></i></a>
+							<p class="title"><a href="/guru">DATA GURU</a></p>
+							<p class="info">Data Guru, Kepala Sekolah</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/siswa"><i class="mdi-action-account-child"></i></a>
+							<p class="title"><a href="/siswa">DATA SISWA</a></p>
+							<p class="info">Manajemen Data Siswa</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/mapel"><i class="mdi-action-book"></i></a>
+							<p class="title"><a href="/mapel">MATA PELAJARAN</a></p>
+							<p class="info">Mata Pelajaran, Ekstrakurikuler</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/nilai"><i class="mdi-action-assignment"></i></a>
+							<p class="title"><a href="/nilai">NILAI SISWA</a></p>
+							<p class="info">Nilai Siswa, Rapor</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/absen"><i class="mdi-action-schedule"></i></a>
+							<p class="title"><a href="/absen">ABSENSI</a></p>
+							<p class="info">Data Absensi Guru &amp; Siswa</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/gaji"><i class="mdi-action-account-balance-wallet"></i></a>
+							<p class="title"><a href="/gaji">PENGGAJIAN</a></p>
+							<p class="info">Manajemen Penggajian Guru</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/data"><i class="mdi-action-settings"></i></a>
+							<p class="title"><a href="/data">PENGATURAN</a></p>
+							<p class="info">Pengaturan, Data Aplikasi</p>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="menu-icon">
+							<a href="/user"><i class="mdi-action-perm-identity"></i></a>
+							<p class="title"><a href="/user">PENGGUNA</a></p>
+							<p class="info">Manajemen Pengguna, Ubah Password</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		{% endif %}
+		
+		{% include 'footer.html' %}
+	</div>
+	
+	{% include 'postpage.html' %}
+</body>
+</html>

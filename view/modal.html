@@ -1,0 +1,173 @@
+{% if page == 'siswa' %}
+<div class="modal fade" id="modal-info-siswa">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Detail Siswa</h4>
+            </div>
+            <div class="modal-body" style="max-height: 450px; overflow-y: auto;">
+				{% verbatim %}
+                <table class="table table-striped table-hover table-condensed small">
+					<tbody>
+						<tr>
+							<td colspan="2" class="text-center"><h4>DATA SISWA</h4></td>
+						</tr>
+						<tr>
+							<td width="30%">NIS / NISN</td>
+							<td>: {{infoSiswa.siswa.nis}} / {{infoSiswa.siswa.nisn}}</td>
+						</tr>
+						<tr>
+							<td>Nama</td>
+							<td>: {{infoSiswa.siswa.nama}}</td>
+						</tr>
+						<tr>
+							<td>Kelas / Rombel</td>
+							<td>: {{infoSiswa.siswa.kelas}}</td>
+						</tr>
+						<tr>
+							<td>Tanggal Masuk</td>
+							<td>: {{infoSiswa.siswa.masuk}}</td>
+						</tr>
+						<tr>
+							<td>Pendidikan Sebelumnya</td>
+							<td>: {{infoSiswa.siswa.pendidikan}}</td>
+						</tr>
+						<tr>
+							<td>Tmpt / Tgl Lahir</td>
+							<td>: {{infoSiswa.siswa.tetala}}</td>
+						</tr>
+						<tr>
+							<td>Jenis Kelamin</td>
+							<td>: {{infoSiswa.siswa.jk}}</td>
+						</tr>
+						<tr>
+							<td>Agama</td>
+							<td>: {{infoSiswa.siswa.agama}}</td>
+						</tr>
+						<tr data-ng-show="infoSiswa.siswa.telepon.length > 0">
+							<td>Telepon</td>
+							<td>: {{infoSiswa.siswa.telepon}}</td>
+						</tr>
+						<tr data-ng-show="infoSiswa.siswa.hp.length > 0">
+							<td>Handphone</td>
+							<td>: {{infoSiswa.siswa.hp}}</td>
+						</tr>
+						<tr data-ng-show="infoSiswa.siswa.email.length > 0">
+							<td>Email</td>
+							<td>: {{infoSiswa.siswa.email}}</td>
+						</tr>
+						<tr>
+							<td>Alamat</td>
+							<td>: {{infoSiswa.siswa.alamat}}</td>
+						</tr>
+						<tr data-ng-show="infoSiswa.siswa.rt.length > 0 || infoSiswa.siswa.rw.length > 0">
+							<td>RT / RW</td>
+							<td>: {{infoSiswa.siswa.rt}} / {{infoSiswa.siswa.rw}}</td>
+						</tr>
+						<tr data-ng-show="infoSiswa.siswa.dusun.length > 0">
+							<td>Dusun</td>
+							<td>: {{infoSiswa.siswa.dusun}}</td>
+						</tr>
+						<tr>
+							<td>Desa</td>
+							<td>: {{infoSiswa.siswa.desa}}</td>
+						</tr>
+						<tr>
+							<td>Kecamatan</td>
+							<td>: {{infoSiswa.siswa.kecamatan}} / {{infoSiswa.siswa.kdpos}}</td>
+						</tr>
+						<tr data-ng-show="infoSiswa.siswa.kdpos.length > 0">
+							<td>Kode Pos</td>
+							<td>: {{infoSiswa.siswa.kdpos}}</td>
+						</tr>
+						<tr>
+							<td>Kabupaten</td>
+							<td>: {{infoSiswa.siswa.kabupaten}}</td>
+						</tr>
+						<tr>
+							<td>Provinsi</td>
+							<td>: {{infoSiswa.siswa.provinsi}}</td>
+						</tr>
+						<tr>
+							<td>Jenis Tinggal</td>
+							<td>: {{infoSiswa.siswa.jenistinggal}}</td>
+						</tr>
+						<tr>
+							<td>Alat Transportasi</td>
+							<td>: {{infoSiswa.siswa.transport}}</td>
+						</tr>
+						<tr>
+							<td colspan="2" class="text-center"><h4>DATA ORANG TUA</h4></td>
+						</tr>
+						<tr>
+							<td>Nama Ayah</td>
+							<td>: {{infoSiswa.ayah.nama}}</td>
+						</tr>
+						<tr>
+							<td>Pendidikan Ayah</td>
+							<td>: {{infoSiswa.ayah.pendidikan}}</td>
+						</tr>
+						<tr>
+							<td>Pekerjaan Ayah</td>
+							<td>: {{infoSiswa.ayah.pekerjaan}}</td>
+						</tr>
+						<tr>
+							<td>Penghasilan Ayah</td>
+							<td>: Rp. {{infoSiswa.ayah.penghasilan}},-</td>
+						</tr>
+						<tr>
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>Nama Ibu</td>
+							<td>: {{infoSiswa.ibu.nama}}</td>
+						</tr>
+						<tr>
+							<td>Pendidikan Ibu</td>
+							<td>: {{infoSiswa.ibu.pendidikan}}</td>
+						</tr>
+						<tr>
+							<td>Pekerjaan Ibu</td>
+							<td>: {{infoSiswa.ibu.pekerjaan}}</td>
+						</tr>
+						<tr>
+							<td>Penghasilan Ibu</td>
+							<td>: Rp. {{infoSiswa.ibu.penghasilan}},-</td>
+						</tr>
+					</tbody>
+					<tbody data-ng-show="infoSiswa.wali.length > 0">
+						<tr>
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>Nama Wali</td>
+							<td>: {{infoSiswa.wali.nama}}</td>
+						</tr>
+						<tr>
+							<td>Alamat Wali</td>
+							<td>: {{infoSiswa.wali.alamat}}</td>
+						</tr>
+						<tr>
+							<td>Pendidikan Wali</td>
+							<td>: {{infoSiswa.wali.pendidikan}}</td>
+						</tr>
+						<tr>
+							<td>Pekerjaan Wali</td>
+							<td>: {{infoSiswa.wali.pekerjaan}}</td>
+						</tr>
+						<tr>
+							<td>Penghasilan Wali</td>
+							<td>: Rp. {{infoSiswa.wali.penghasilan}},-</td>
+						</tr>
+					</tbody>
+				</table>
+				{% endverbatim %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -1,42 +1,99 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ng-app="twista" data-ng-controller="MainCtrl" id="twista">
 <head>
 	<meta charset="UTF-8">
-	<title>View dengan Twig</title>
+	<title>Aplikasi Manajemen Sekolah Dasar &mdash; AMSD</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
-	<!-- bootstrap -->
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
-
+	{% include 'prepage.html' %}
 </head>
-<body>
+<body material-init>
+	
 	<div class="container">
-		<div class="well">
-			<h1>{{greeting}}</h1>
-			<p><span class="label label-info">Informasi:</span> Data lokasi server: <strong>{{server}}</strong></p>
-		</div>
-		<div class="table-responsive">
-			<table class="table table-striped table-condensed table-hover">
-				<thead>
-					<tr>
-						<th>id</th>
-						<th>jahr</th>
-						<th>interpret</th>
-						<th>titel</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for c in cds %}
-					<tr>
-						<td>{{c.id}}</td>
-						<td>{{c.jahr}}</td>
-						<td>{{c.interpret}}</td>
-						<td>{{c.titel}}</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+		<div class="row" id="front-container">
+			<div class="col-md-6">
+				<div id="front-info" class="shadow-z-1">
+					<p class="text-center">
+						<img src="/img/logo.png" alt="logo" class="logo">
+					</p>
+					<table class="table table-condensed">
+						<tbody>
+							<tr>
+								<td>Sekolah</td>
+								<td class="bold">{{sekolah.nama}}</td>
+							</tr>
+							<tr>
+								<td>NIS - NSS - NDS</td>
+								<td class="bold">{{sekolah.nomor}}</td>
+							</tr>
+							<tr>
+								<td>Alamat Sekolah</td>
+								<td class="bold">{{sekolah.alamat}}</td>
+							</tr>
+							<tr>
+								<td>Kelurahan - Desa</td>
+								<td class="bold">{{sekolah.desa}}</td>
+							</tr>
+							<tr>
+								<td>Kecamatan</td>
+								<td class="bold">{{sekolah.kecamatan}}</td>
+							</tr>
+							<tr>
+								<td>Telepon - Fax</td>
+								<td class="bold">{{sekolah.telepon}}</td>
+							</tr>
+							<tr>
+								<td>Kode Pos</td>
+								<td class="bold">{{sekolah.kodepos}}</td>
+							</tr>
+							<tr>
+								<td>Kota - Kabupaten</td>
+								<td class="bold">{{sekolah.kabupaten}}</td>
+							</tr>
+							<tr>
+								<td>Provinsi</td>
+								<td class="bold">{{sekolah.provinsi}}</td>
+							</tr>
+							<tr>
+								<td>Website</td>
+								<td class="bold">{{sekolah.website}}</td>
+							</tr>
+							<tr>
+								<td>Email</td>
+								<td class="bold">{{sekolah.email}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<form action="/login" method="post" class="form-horizontal shadow-z-2 well" id="front-login">
+					<fieldset>
+						<legend></legend>
+						<div class="form-group">
+							<label for="login-username" class="col-lg-4 control-label">USERNAME</label>
+							<div class="col-lg-7">
+								<input type="text" name="username" id="login-username" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="login-password" class="col-lg-4 control-label">PASSWORD</label>
+							<div class="col-lg-7">
+								<input type="password" name="password" id="login-password" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-lg-7 col-lg-offset-4">
+								<button class="btn btn-lg btn-success btn-raised"><i class="mdi-action-lock-open pull-left"></i>MASUK</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
 		</div>
 	</div>
+	
+	{% include 'postpage.html' %}
 </body>
 </html>

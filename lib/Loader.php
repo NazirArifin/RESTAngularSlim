@@ -47,6 +47,7 @@ class Loader {
 		\Slim\Slim::registerAutoloader();
 		$this->app = new \Slim\Slim();
 		$this->load('helper', 'controller');
+		$this->load('helper', 'token');
 		$app =& $this->app;
 		$ctr = $this;
 		
