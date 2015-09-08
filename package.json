@@ -1,11 +1,23 @@
 {
-  "name": "amssd",
-  "version": "1.0.0",
-  "description": "aplikasi manajemen sekolah dasar",
+  "name": "twistangular",
+  "version": "1.3.0",
+  "description": "boostrap rest service with twig, slim and angular",
   "main": "index.php",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NazirArifin/TwistAngular.git"
+  },
   "keywords": [
-    "amssd"
+    "twistangular"
   ],
   "author": "Mohammad Nazir Arifin",
-  "license": "ISC"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NazirArifin/TwistAngular/issues"
+  },
+  "homepage": "https://github.com/NazirArifin/TwistAngular#readme",
+  "devDependencies": {
+    "gulp": "latest",
+	"gulp-util": "latest"
+  }
 }

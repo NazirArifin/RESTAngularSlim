@@ -1,1 +1,2 @@
-config/cache
+config/cache/
+node_modules/
