@@ -18,6 +18,13 @@
   "homepage": "https://github.com/NazirArifin/TwistAngular#readme",
   "devDependencies": {
     "gulp": "latest",
-	"gulp-util": "latest"
+	"gulp-util": "latest",
+	"gulp-jshint": "latest",
+	"gulp-sourcemaps": "latest",
+	"gulp-concat": "latest",
+	"gulp-uglify": "latest",
+	"gulp-minify-css": "latest",
+	"jshint-stylish": "latest",
+	"angular": "latest"
   }
 }
