@@ -1,0 +1,126 @@
+.autocomplete-suggestions {
+    text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+
+    /* core styles should not be changed */
+    position: absolute; display: none; z-index: 9999; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
+}
+.autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; font-size: 1.02em; color: #333; }
+.autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
+.autocomplete-suggestion.selected { background: #f0f0f0; }
+.select2-container--default .select2-selection--single {
+	border: 0;
+	background-image: linear-gradient(#009688,#009688),linear-gradient(#d2d2d2,#d2d2d2);
+	background-size: 0 2px,100% 1px;
+	background-repeat: no-repeat;
+	background-position: center bottom,center calc(100% - 1px);
+	background-color: transparent;
+	transition: background 0s ease-out;
+}
+.sweet-alert { font-family: inherit; }
+.sweet-alert .sa-input-error {
+	top: 21px;
+}
+.sweet-alert p {
+	font-size: 14px;
+}
+
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  border-radius: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn  i[class^='mdi'], .btn i[class*=' mdi']  {
+	float: left;
+	margin-right: 5px;
+	margin-top: -3px;
+	margin-left: -10px;
+}
+
+body {
+	background-color: #fff;
+}
+
+
+.bold {
+	font-weight: bold;
+}
+
+.small {
+	font-size: 1.25rem;
+}
+
+.light-text {
+	font-weight: 100;
+}
+
+.help {
+	cursor: help;
+}
+
+.underlined {
+	text-decoration: underline;
+}
+
+.justify-align {
+	text-align: justify;
+}
+
+.ng-enter, .ng-move {
+	-webkit-animation: zoomIn 0.3s;
+	-moz-animation: zoomIn 0.3s;
+	-o-animation:  zoomIn 0.3s;
+	animation:  zoomIn 0.3s;
+}
+
+.ng-leave {
+	-webkit-animation: zoomOut 0.3s;
+	-moz-animation: zoomOut 0.3s;
+	-o-animation: zoomOut 0.3s;
+	animation: zoomOut 0.3s;
+}
+
+.ng-hide-add {
+	-webkit-animation: fadeOut 0.5s;
+	-moz-animation: fadeOut 0.5s;
+	-o-animation:  fadeOut 0.5s;
+	animation:  fadeOut 0.5s;
+}
+
+.ng-hide-remove {
+	-webkit-animation: fadeIn 1s;
+	-moz-animation: fadeIn 1s;
+	-o-animation: fadeIn 1s;
+	animation: fadeIn 1s;
+}

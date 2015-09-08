@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('twista', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ngStorage']).
-config(function($routeProvider, $httpProvider) {
+config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
 	/*
 	$routeProvider
 	.when('/', { 
@@ -15,7 +15,7 @@ config(function($routeProvider, $httpProvider) {
 	$httpProvider.defaults.transformRequest = [function(data) {
 		return angular.isObject(data) && String(data) !== '[object File]' ? jQuery.param(data) : data;
 	}];
-}).
+}]).
 run(['$rootScope', '$location', function($rootScope, $location) {
 	$rootScope.$on("$routeChangeError", function(event, current, previous, rejection) {
 		$location.path('/').replace();

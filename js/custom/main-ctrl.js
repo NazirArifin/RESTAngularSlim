@@ -1,5 +1,5 @@
 /* main controller */
-app.controller('MainCtrl', function($scope, $http) {
+app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 	/**
 	 * untuk pagination
 	 */
@@ -12,4 +12,6 @@ app.controller('MainCtrl', function($scope, $http) {
 	
 	// untuk upload terserah
 	$scope.file = null;
-});
+	
+	
+}]);
