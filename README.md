@@ -11,6 +11,7 @@
 	<li>Firebase PHP JWT</li>
 	<li>FontAwesome</li>
 	<li>Select2</li>
+	<li>Bootstrap Material</li>
 </ul>
 
 <h2>Bagaimana Memulai?</h2>
