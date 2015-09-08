@@ -32,6 +32,27 @@ app.directive('popovers', function() {
 });
 
 /**
+ * Select2
+ */
+app.directive('select2', ['$timeout', function($timeout) {
+	return {
+		restrict: 'CA',
+		require: '?ngModel',
+		scope: { val: '=' },
+		link: function(scope, elm, attrs, ctrl) {
+			elm.select2();
+			scope.$watch('val', function(newValue, oldValue) {
+				if (newValue) {
+					$timeout(function() {
+						elm.select2('val', newValue);
+					}, 0, false);
+				}
+			});
+		}
+	};
+}]);
+
+/**
  * material init
  */
 app.directive('materialInit', function() {
@@ -66,29 +87,68 @@ app.directive('datepicker', function() {
 	};
 });
 
-/** autosuggest */
-app.directive('autosuggest', function() {
+/** timepicker */
+app.directive('timepicker', function() {
 	return function($scope, elm, attrs) {
-		var xhr;
-		elm.autoComplete({
-			minChars: 1, delay: 50,
-			source: function(term, response){
-				try { xhr.abort(); } catch(e){}
-				xhr = $.getJSON(attrs.autosuggest, { q: term }, function(data){ response(data); });
-			}
-		});
+		elm.bootstrapMaterialDatePicker({ date: false, shortTime: false, format: 'HH:mm' });
 	};
 });
 
-/** detail info siswa */
-app.directive('detailSiswa', ['$http', function($http) {
-	return function($scope, elm, attrs) {
-		elm.on('click', function(e) {
-			$http.get('/api/siswa/' + attrs.detailSiswa)
-			.success(function(d) { 
-				$scope.setInfoSiswa(d.siswa);
-				$('#modal-info-siswa').modal('show');
+/** autosuggest */
+app.directive('autosuggest', function() {
+	return {
+		restrict: 'CA',
+		require: '?ngModel',
+		scope: { val: '=' },
+		link: function(scope, elm, attrs, ngModel) {
+			var xhr;
+			elm.autoComplete({
+				minChars: 1, delay: 50,
+				source: function(term, response){
+					try { xhr.abort(); } catch(e){}
+					xhr = $.getJSON(attrs.autosuggest, { q: term }, function(data){ response(data); });
+				},
+				onSelect: function(e, term, item) {
+					ngModel.$setViewValue(term);
+					ngModel.$render();
+				}
 			});
-		});
+		}
 	};
-}]);
+});
+
+/**
+ * Input file sederhana, diset $scope.file
+ */
+app.directive('simpleFileInput', function() {
+	return function($scope, elm, attrs) {
+		elm.on('change', function(e) {
+			var valid = true, temp = [];
+			for (var i in e.target.files) {
+				var f = e.target.files[i];
+				if (i.match(/[^0-9]/)) continue;
+				if (temp.length == 5) break;
+				
+				temp.push(f);
+				var	a = f.name.split('.');
+				if (a.length === 1 || (a[0] == "" && a.length === 2)) { valid = false; break; } 
+				else {
+					var b = '.' + a.pop().toLowerCase();
+					if (attrs.accept.split(',').indexOf(b) === -1) { valid = false; break; }
+					if (f.size > (1 * 1024 * 1024)) { valid = false; break; }
+				}
+			}
+			
+			if ( ! valid) {
+				alertify.error('File terlalu besar atau tidak valid, gunakan file lain');
+				return false;
+			}
+			if (temp.length == 0) {
+				e.val('');
+				$scope.file = null;
+				return false;
+			}
+		});
+	}
+});
+

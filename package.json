@@ -1,0 +1,11 @@
+{
+  "name": "amssd",
+  "version": "1.0.0",
+  "description": "aplikasi manajemen sekolah dasar",
+  "main": "index.php",
+  "keywords": [
+    "amssd"
+  ],
+  "author": "Mohammad Nazir Arifin",
+  "license": "ISC"
+}
