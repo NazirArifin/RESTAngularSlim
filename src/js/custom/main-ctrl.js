@@ -12,6 +12,4 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 	
 	// untuk upload terserah
 	$scope.file = null;
-	
-	
 }]);

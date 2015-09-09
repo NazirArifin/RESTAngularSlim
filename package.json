@@ -25,6 +25,7 @@
 	"gulp-uglify": "latest",
 	"gulp-minify-css": "latest",
 	"gulp-sass": "latest",
+	"gulp-autoprefixer": "latest",
 	"jshint-stylish": "latest",
 	"angular": "latest"
   }
