@@ -2,19 +2,12 @@
 
 var app = angular.module('twista', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ngStorage']).
 config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
-	/*
-	$routeProvider
-	.when('/', { 
-		templateUrl: 'html/index.html', 
-		controller: 'MainCtrl' 
-	})
-	.otherwise({ redirectTo: '/' });
-	*/
 	
 	$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
 	$httpProvider.defaults.transformRequest = [function(data) {
 		return angular.isObject(data) && String(data) !== '[object File]' ? jQuery.param(data) : data;
 	}];
+	
 }]).
 run(['$rootScope', '$location', function($rootScope, $location) {
 	$rootScope.$on("$routeChangeError", function(event, current, previous, rejection) {
