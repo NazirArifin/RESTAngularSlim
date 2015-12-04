@@ -36,23 +36,12 @@ function halt404($app) {
 	$app->halt(404);
 	$app->stop();
 }
-
-/**
- * Redirect ke home
- */
-function redirect_home($app, $message = '') {
-	$app->redirect('/home' . ( ! empty($message) ? '?pesan=' . $message : ''));
-}
-
-/**
- * Redirect ke root
- */
-function redirect_index($app, $message = '') {
-	$app->redirect('/' . ( ! empty($message) ? '?pesan=' . $message : ''));
-}
  
 /**
- * Header json
+ * menghasilkan output json ke browser
+ * @param  object $app  instance dari aplikasi
+ * @param  mixed $data   data yang akan dijadikan json
+ * @return void
  */
 function json_output($app, $data) {
 	$app->contentType('application/json');

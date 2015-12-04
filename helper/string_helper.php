@@ -1,6 +1,12 @@
 <?php
 
 if ( ! function_exists('token_truncate')) {
+	/**
+	 * memotong string dengan ukuran tertentu
+	 * @param  string $string teks yang akan dipotong
+	 * @param  int $width  panjang maksimal
+	 * @return string         teks hasil pemotongan
+	 */
 	function token_truncate($string, $width) {
 		$parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
 		$parts_count = count($parts);

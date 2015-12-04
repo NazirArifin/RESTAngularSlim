@@ -1,6 +1,12 @@
 <?php
-
 if ( ! function_exists('format_date')) {
+	/**
+	 * mengubah format tanggal ke bahasa indonesian
+	 * @param  string  $f format output
+	 * @param  integer $t timestamp
+	 * @param  boolean $h apakah kalender mode hijriah
+	 * @return string     hasil perubahan string
+	 */
 	function format_date($f , $t = 0, $h = FALSE) {
 		global $ctr;
 		if ( ! is_numeric($t))
@@ -14,6 +20,12 @@ if ( ! function_exists('format_date')) {
 }
 
 if ( ! function_exists('datedb_to_tanggal')) {
+	/**
+	 * mengubah tanggal database ke bahasa indonesia
+	 * @param  string $d tanggal dengan format database
+	 * @param  string $f format output
+	 * @return string    hasil pengolahan tanggal
+	 */
 	function datedb_to_tanggal($d, $f) {
 		// Asumsi tanggal dari database adalah yyyy-mm-dd
 		if (strpos($d, ':') !== FALSE) {
@@ -32,6 +44,13 @@ if ( ! function_exists('datedb_to_tanggal')) {
 }
 
 if ( ! function_exists('tanggal_to_datedb')) {
+	/**
+	 * mengubah tanggal ke date database
+	 * @param  string $d  tanggal
+	 * @param  string $ds date separator, default /
+	 * @param  string $ts time separator, default :
+	 * @return string     tanggal dengan format db
+	 */
 	function tanggal_to_datedb($d, $ds = '/', $ts = ':') {
 		$p = '([0-9]{1,2})' . $ds . '([0-9]{1,2})' . $ds . '([0-9]{2,4})';
 		
@@ -64,6 +83,11 @@ if ( ! function_exists('tanggal_to_datedb')) {
 }
 
 if ( ! function_exists('x_week_range')) {
+	/**
+	 * mendapatkan tanggal dalam satu minggu
+	 * @param  [type] $date [description]
+	 * @return [type]       [description]
+	 */
 	function x_week_range($date) {
 		$ts = strtotime($date);
 		$start = (date('w', $ts) == 0) ? $ts : strtotime('last sunday', $ts);
