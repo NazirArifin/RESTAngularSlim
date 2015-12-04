@@ -6,33 +6,39 @@
 namespace Lib;
 
 class Loader {
-	private function __construct() {}
-	private static $instance;
-	public static function get_instance() {
-		if (is_null(self::$instance)) {
-			$c = __CLASS__;
-			self::$instance = new $c;
-		}
-		return self::$instance;
-	}
-	
 	/**
-	 * Cache view
+	 * Menentukan apakah view twig di cache atau tidak
+	 * @var $cache_view boolean
 	 */
 	private $cache_view = false;
-	
+
 	/**
-	 * Load controller dan router
+	 * Timezone aplikasi yang akan digunakan
+	 * @var $timezone string
+	 */
+	private $timezone = 'Asia/Jakarta';
+
+	/**
+	 * Slim debugging mode
+	 * @var $slim_debug boolean
+	 */
+	private $slim_debug = true;
+	
+
+	/**
+	 * loader sebenarnya, menyiapkan seluruh sistem dan menjalankan slim
+	 * @return void
 	 */
 	public function controller() {
 		// set timezone
-		date_default_timezone_set('Asia/Jakarta');
+		date_default_timezone_set($this->timezone);
 		
 		// twig template
 		require_once 'lib/Twig/Autoloader.php';
 		\Twig_Autoloader::register();
 		
 		$view = 'view' . ( ! empty($this->direktori) ? '/' . $this->direktori : '');
+		// cache atau tidak
 		if ($this->cache_view) {
 			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view), array(
 				'cache' => 'config/cache'
@@ -47,7 +53,6 @@ class Loader {
 		\Slim\Slim::registerAutoloader();
 		$this->app = new \Slim\Slim();
 		$this->load('helper', 'controller');
-		$this->load('helper', 'token');
 		$app =& $this->app;
 		$ctr = $this;
 		
@@ -56,7 +61,7 @@ class Loader {
 			print $twig->render('404.html', array());
 		});
 		
-		// controller file
+		// load semua controller file
 		foreach (scandir('controller') as $file) {
 			if (is_file('controller/' . $file)) {
 				require('controller/' . $file);
@@ -67,7 +72,8 @@ class Loader {
 	}
 	
 	/**
-	 * Load database
+	 * load database secara otomatis
+	 * @return void
 	 */
 	public function database() {
 		static $host, $user, $pass, $dbnm, $drvr, $port;
@@ -97,30 +103,71 @@ class Loader {
 	}
 	
 	/**
-	 * Load interface
+	 * fungsi untuk meload model, view, helper dan file
+	 * @param  string $type   jenis resource yang diload
+	 * @param  string $param  parameter yang dilewatkan
+	 * @param  mixed $param2  parameter tambahan, biasanya berupa array
+	 * @return void
 	 */
 	public function load($type, $param, $param2 = null) {
 		switch ($type) {
 			case 'model':
-				$m = $this->model($param);
+				$m = $this->load_model($param);
 				$this->$m[0] = $m[1];
 				break;
 			case 'helper':
-				$this->helper($param);
+				$this->load_helper($param);
 				break;
 			case 'file':
-				$this->file($param);
+				$this->load_file($param);
 				break;
 			case 'view':
-				$this->view($param, $param2);
+				$this->load_view($param, $param2);
 				break;
 		}
 	}
+
+	/**
+	 * shortcut untuk load model
+	 * @param  string $param nama model
+	 * @return array         hasil pembuatan model baru
+	 */
+	public function model($param) {
+		return $this->load_model($param);
+	}
+
+	/**
+	 * shortcut untuk load helper
+	 * @param  string $param nama helper
+	 * @return void
+	 */
+	public function helper($param) {
+		$this->load_helper($param);
+	}
 	
+	/**
+	 * shortcut untuk load file
+	 * @param  string $param path file yang akan diinclude
+	 * @return void
+	 */
+	public function file($param) {
+		$this->load_file($param);
+	}
+
+	/**
+	 * shortcut untuk load view
+	 * @param  string $view  nama view di folder view
+	 * @param  array  $param data yang dilewatkan ke view
+	 * @return void
+	 */
+	public function view($view, $param) {
+		$this->load_view($view, $param);
+	}
+
 	/**
 	 * Load model
 	 */
-	protected function model($m) {
+	protected function load_model($m) {
 		$model = 'model/' . $m . '_model.php';
 		if ( ! is_file($model)) {
 			$this->app->halt(500, 'Cant load Model');
@@ -135,21 +182,34 @@ class Loader {
 	/**
 	 * Load helper
 	 */
-	protected function helper($h) {
+	protected function load_helper($h) {
 		require_once 'helper/' . $h . '_helper.php';
 	}
 	
 	/**
 	 * Load file
 	 */
-	protected function file($f) {
+	protected function load_file($f) {
 		require_once $f;
 	}
 	
 	/**
 	 * Load View
 	 */
-	protected function view($v, $p) {
+	protected function load_view($v, $p) {
 		print $this->twig->render($v, $p);
+	}
+
+	/**
+	 * construct dijadikan private biar hanya ada satu instance
+	 */
+	private function __construct() {}
+	private static $instance;
+	public static function get_instance() {
+		if (is_null(self::$instance)) {
+			$c = __CLASS__;
+			self::$instance = new $c;
+		}
+		return self::$instance;
 	}
 }
