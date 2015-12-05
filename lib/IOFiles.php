@@ -1,4 +1,6 @@
 <?php
+namespace Lib;
+
 /* IOFILES CLASS
  *
  * Class ini menghandle beberapa hal umum yang berhubungan dengan files.

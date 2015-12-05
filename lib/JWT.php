@@ -1,4 +1,5 @@
 <?php
+namespace Lib;
 
 /**
  * JSON Web Token implementation, based on this spec:

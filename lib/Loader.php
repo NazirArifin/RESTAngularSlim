@@ -96,6 +96,8 @@ class Loader {
 				'database' => $dbnm,
 				'port' => $port
 			);
+			
+			// include driver di setting
 			include 'lib/db_' . strtolower($drvr) . '.php';
 			return $conn = new Db($data);
 		}
@@ -123,6 +125,9 @@ class Loader {
 				break;
 			case 'view':
 				$this->load_view($param, $param2);
+				break;
+			case 'lib':
+				return $this->load_lib($param);
 				break;
 		}
 	}
@@ -165,6 +170,15 @@ class Loader {
 	}
 
 	/**
+	 * shortcut untuk load lib
+	 * @param  string $param nama class
+	 * @return object        instance dari class
+	 */
+	public function lib($param) {
+		return $this->load_lib($param);
+	}
+
+	/**
 	 * Load model
 	 */
 	protected function load_model($m) {
@@ -198,6 +212,17 @@ class Loader {
 	 */
 	protected function load_view($v, $p) {
 		print $this->twig->render($v, $p);
+	}
+
+	/**
+	 * load library
+	 * @param  string $l nama class di lib
+	 * @return object    instance dari class
+	 */
+	protected function load_lib($l = '') {
+		require_once 'lib/' . $l. '.php';
+		$class = '\\Lib\\' . $l;
+		return new $class();
 	}
 
 	/**

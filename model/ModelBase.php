@@ -43,6 +43,4 @@ class ModelBase {
 		}
 		return $r;
 	}
-	
-	
 }
