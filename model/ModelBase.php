@@ -1,8 +1,6 @@
 <?php
 namespace Model;
 
-set_time_limit(0);
-
 class ModelBase {    
     /**
 	 * Parent Constructor
