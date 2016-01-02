@@ -1,6 +1,6 @@
 <?php
 /**
- * Driver mysqli langsung diletakkan disini
+ * Driver mysqli
  */
 namespace Lib;
  
@@ -27,17 +27,16 @@ class Db {
 		
 		$this->conn_id = $this->db_connect();
 		
-		if ( ! $this->conn_id) {
+		if (FALSE === $this->conn_id) {
 			$e = $this->connect_error();
-			echo 'Database connection failed with message: "' . $e[1] . '"';
+			exit('Database connection failed with message: "' . $e[1] . '"');
 			return FALSE;
 		}
 		
-		if ($this->database != '') {
-			if ( ! $this->db_select()) {
-				echo 'Can\'t select database';
-				return FALSE;
-			}
+		// select db
+		if (FALSE === $this->db_select()) {
+			exit('Can\'t select database');
+			return FALSE;
 		}
 		
 		return TRUE;

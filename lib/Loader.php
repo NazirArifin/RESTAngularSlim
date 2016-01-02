@@ -98,7 +98,7 @@ class Loader {
 			);
 			
 			// include driver di setting
-			include 'lib/db_' . strtolower($drvr) . '.php';
+			include 'lib/DbDriver/db_' . strtolower($drvr) . '.php';
 			return $conn = new Db($data);
 		}
 		return $conn;
@@ -138,7 +138,8 @@ class Loader {
 	 * @return array         hasil pembuatan model baru
 	 */
 	public function model($param) {
-		return $this->load_model($param);
+		$m = $this->load_model($param);
+		$this->$m[0] = $m[1];
 	}
 
 	/**

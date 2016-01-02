@@ -6,7 +6,7 @@ $dbconfig_host = 'localhost';
 $dbconfig_database = '';
 
 // The database authentication user
-$dbconfig_username = 'root';
+$dbconfig_username = '';
 
 // The database authentication password
 $dbconfig_password = '';
