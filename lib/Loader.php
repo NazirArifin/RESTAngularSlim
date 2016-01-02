@@ -61,6 +61,11 @@ class Loader {
 			print $twig->render('404.html', array());
 		});
 		
+		// auto load library
+		spl_autoload_register(function($class) {
+			require_once 'lib/' . str_replace('Lib\\', '', $class) . '.php';
+		});
+		
 		// load semua controller file
 		foreach (scandir('controller') as $file) {
 			if (is_file('controller/' . $file)) {

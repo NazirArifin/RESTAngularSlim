@@ -5,3 +5,4 @@ $app->get('/', function() use($app, $ctr) {
 	$ctr->view('index.html', array());
 	
 });
+
