@@ -7,31 +7,15 @@ namespace Lib;
 
 class Loader {
 	/**
-	 * Menentukan apakah view twig di cache atau tidak
-	 * @var $cache_view boolean
-	 */
-	private $cache_view = false;
-
-	/**
-	 * Timezone aplikasi yang akan digunakan
-	 * @var $timezone string
-	 */
-	private $timezone = 'Asia/Jakarta';
-
-	/**
-	 * Slim debugging mode
-	 * @var $slim_debug boolean
-	 */
-	private $slim_debug = true;
-	
-
-	/**
 	 * loader sebenarnya, menyiapkan seluruh sistem dan menjalankan slim
 	 * @return void
 	 */
 	public function controller() {
+		// load configs
+		require_once 'config/envconfig.php';
+
 		// set timezone
-		date_default_timezone_set($this->timezone);
+		date_default_timezone_set($timezone);
 		
 		// twig template
 		require_once 'lib/Twig/Autoloader.php';
@@ -39,9 +23,9 @@ class Loader {
 		
 		$view = 'view' . ( ! empty($this->direktori) ? '/' . $this->direktori : '');
 		// cache atau tidak
-		if ($this->cache_view) {
+		if ($cache_view) {
 			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view), array(
-				'cache' => 'config/cache'
+				'cache' => 'cache'
 			));
 		} else {
 			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view));
@@ -51,7 +35,11 @@ class Loader {
 		// router dengan Slim
 		require_once 'lib/Slim/Slim.php';
 		\Slim\Slim::registerAutoloader();
-		$this->app = new \Slim\Slim();
+		$this->app = new \Slim\Slim(
+			array(
+				'debug'	=> $debug
+			)
+		);
 		$this->load('helper', 'controller');
 		$app =& $this->app;
 		$ctr = $this;
