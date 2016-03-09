@@ -1,57 +1,66 @@
 /* File: gulpfile.js */
+
 var gulp  = require('gulp'),
 	concat = require('gulp-concat'),
 	uglify = require('gulp-uglify'),
+	gutil = require('gulp-util'),
+	plumber = require('gulp-plumber'),
 	minify = require('gulp-minify-css'),
 	sass = require('gulp-sass'),
 	prefixer = require('gulp-autoprefixer'),
-	sourcemaps = require('gulp-sourcemaps');
+	sourcemaps = require('gulp-sourcemaps'),
+	flatten = require('gulp-flatten'),
+	watch = require('gulp-watch'),
+	livereload = require('gulp-livereload');
 
-gulp.task('default', ['watch']);
-
-gulp.task('build-scss', function() {
-	return gulp.src('src/css/sass/**/*.scss').
-		pipe(concat('custom.min.css')).
+/** compile scss in src */
+gulp.task('sass', function() {
+	return gulp.src('./src/**/*.scss').
+		pipe(plumber()).
 		pipe(sass()).
-		pipe(prefixer({ browser: ['> 5%'], cascade: false })).
+		pipe(prefixer({ browser: ['> 1%'], cascade: false })).
+		pipe(concat('custom.min.css')).
 		pipe(minify()).
-		pipe(gulp.dest('css'));
+		pipe(gulp.dest('./css'));
 });
 
-gulp.task('build-tools-css', function() {
-	return gulp.src('src/css/tools/**/*.css').
-		pipe(concat('tools.min.css')).
-		pipe(minify()).
-		pipe(gulp.dest('css'));
-});
-
-gulp.task('build-js', function() {
-	return gulp.src('src/js/custom/**/*.js').
-		pipe(sourcemaps.init()).
-			pipe(concat('custom.min.js')).
-			pipe(uglify()).
-		pipe(sourcemaps.write()).
-		pipe(gulp.dest('js'));
-});
-
-gulp.task('build-tools-js', function() {
-	return gulp.src('src/js/tools/**/*.js').
-		pipe(concat('tools.min.js')).
+/** concat and minify js in src */
+gulp.task('js', function() {
+	return gulp.src('./src/**/*.js').
+		pipe(plumber()).
 		pipe(uglify()).
-		pipe(gulp.dest('js'));
+		pipe(concat('custom.min.js')).
+		pipe(gulp.dest('./js'));
 });
 
-gulp.task('build-helpers-js', function() {
-	return gulp.src('src/js/helpers/**/*.js').
-		pipe(concat('helpers.min.js')).
-		pipe(uglify()).
-		pipe(gulp.dest('js'));
+/** copy html in src to view */
+gulp.task('html', function() {
+	return gulp.src('./src/**/*.html').
+		pipe(flatten()).
+		pipe(gulp.dest('./view')).
+		pipe(livereload());
 });
 
+/** watch php file in controller and model */
+gulp.task('php', function() {
+	return gulp.src(['./controller/**/*.php', './model/**/*.php']).
+		pipe(watch(['./controller/**/*.php', './model/**/*.php'])).
+		pipe(livereload());
+});
+
+/** serve task */
+gulp.task('serve', function() {
+
+});
+
+/** watch task */
 gulp.task('watch', function() {
-	gulp.watch('src/css/sass/**/*.scss', ['build-scss']);
-	gulp.watch('src/css/tools/**/*.css', ['build-tools-css']);
-	gulp.watch('src/js/custom/**/*.js', ['build-js']);
-	gulp.watch('src/js/tools/**/*.js', ['build-tools-js']);
-	gulp.watch('src/js/helpers/**/*.js', ['build-helpers-js']);
+	//livereload.listen({ quiet: true });
+	livereload.listen({ quiet: false });
+	gulp.watch('./src/**/*.js', ['js']);
+	gulp.watch('./src/**/*.html', ['html']);
+	gulp.watch('./src/**/*.scss', ['sass']);
 });
+
+/** default task */
+gulp.task('default', ['watch', 'php', 'html', 'js', 'sass']);

@@ -24,6 +24,10 @@
   	"gulp-uglify": "latest",
   	"gulp-minify-css": "latest",
   	"gulp-sass": "latest",
-  	"gulp-autoprefixer": "latest"
+  	"gulp-autoprefixer": "latest",
+    "gulp-plumber": "latest",
+    "gulp-livereload": "latest",
+    "gulp-flatten": "latest",
+    "gulp-watch": "latest"
   }
 }
