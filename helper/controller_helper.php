@@ -47,3 +47,13 @@ function json_output($app, $data) {
 	$app->contentType('application/json');
 	echo json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 }
+
+/**
+ * autentifikasi menggunakan middleware
+ * @param  obj 		$app slim app instance
+ * @param  obj 		$ctr controller instance
+ * @return boolean      sukses atau gagal autentifikasi
+ */
+function authenticate($app, $ctr) {
+	
+};

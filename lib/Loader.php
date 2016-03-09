@@ -11,6 +11,10 @@ class Loader {
 	 * @return void
 	 */
 	public function controller() {
+		// starting session
+		session_cache_limiter(false);
+		session_start();
+
 		// load configs
 		require_once 'config/envconfig.php';
 
