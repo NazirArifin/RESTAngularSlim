@@ -55,32 +55,34 @@ gulp.task('bower', function() {
 });
 
 /** compile scss in src */
-gulp.task('sass', function() {
+gulp.task('sass', ['html'], function() {
 	return gulp.src('./src/**/*.scss').
 		pipe(plumber()).
 		pipe(sass()).
 		pipe(prefixer({ browser: ['> 1%'], cascade: false })).
 		pipe(concat('custom.min.css')).
 		pipe(minify()).
-		pipe(gulp.dest('./css'));
+		pipe(gulp.dest('./css')).
+		pipe(livereload());
 });
 
 /** concat and minify js in src */
-gulp.task('js', function() {
+gulp.task('js', ['html'], function() {
 	return gulp.src('./src/**/*.js').
 		pipe(plumber()).
 		pipe(uglify()).
 		pipe(concat('custom.min.js')).
-		pipe(gulp.dest('./js'));
+		pipe(gulp.dest('./js')).
+		pipe(livereload());
 });
 
 /** copy html in src to view */
 gulp.task('html', function() {
-	var mainFilter = filter('**/index.html', { restore: true });
-
 	return gulp.src('./src/**/*.html').
-		pipe(mainFilter).
-		pipe(inject(gulp.src('./css/*.css', { read: false }))).
+		pipe(inject(gulp.src([
+			'./css/!(custom)*.min.css',
+			'./css/custom.min.css'
+		], { read: false }))).
 		pipe(inject(gulp.src([
 			'./js/jquery.min.js'
 		], { read: false }), { starttag: '<!-- inject:head:{{ext}} -->' })).
@@ -88,7 +90,6 @@ gulp.task('html', function() {
 			'./js/*.js', 
 			'!./js/jquery.min.js'
 		], { read: false }))).
-		pipe(mainFilter.restore).
 		pipe(flatten()).
 		pipe(gulp.dest('./view')).
 		pipe(livereload());
@@ -97,7 +98,10 @@ gulp.task('html', function() {
 /** watch php file in controller and model */
 gulp.task('php', function() {
 	return gulp.src(['./controller/**/*.php', './model/**/*.php'], { read: false }).
-		pipe(watch(['./controller/**/*.php', './model/**/*.php'])).
+		pipe(watch([
+			'./controller/**/*.php', 
+			'./model/**/*.php'
+		])).
 		pipe(livereload());
 });
 
@@ -106,7 +110,10 @@ gulp.task('watch', function() {
 	livereload.listen({ quiet: true });
 	// livereload.listen({ quiet: false });
 	
-	// gulp-watch untuk html
+	// gulp-watch js and css changes then update html for inject
+	gulp.src(['js/*.js', 'css/*.css'], { read: false }).
+		pipe(watch(['js/*.js', 'css/*.css'], function() { gulp.start('html'); }));
+	// gulp-watch untuk js
 	gulp.src('src/**/*.js', { read: false }).
 		pipe(watch('src/**/*.js', function() { gulp.start('js'); }));
 	// gulp-watch untuk html
