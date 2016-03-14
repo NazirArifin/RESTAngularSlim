@@ -1,4 +1,8 @@
 <?php
+// salt for password creation
+// value: string
+$salt           = '';
+
 // cache view or not
 // value: true/false
 $cache_view     = false;

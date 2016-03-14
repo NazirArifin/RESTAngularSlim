@@ -15,8 +15,9 @@ class Loader {
 		session_cache_limiter(false);
 		session_start();
 
-		// load configs
+		// load configs		
 		require_once 'config/envconfig.php';
+		$this->salt = $salt;
 
 		// set timezone
 		date_default_timezone_set($timezone);
@@ -67,6 +68,12 @@ class Loader {
 		
 		$this->app->run();
 	}
+
+	/**
+	 * salt untuk password
+	 * @var string
+	 */
+	private $salt = '';
 	
 	/**
 	 * load database secara otomatis
@@ -76,7 +83,7 @@ class Loader {
 		static $host, $user, $pass, $dbnm, $drvr, $port;
 		static $conn;
 		if (empty($host)) {
-			require 'config/dbconfig.php';
+			require_once 'config/dbconfig.php';
 			$host = $dbconfig_host;
 			$user = $dbconfig_username;
 			$pass = $dbconfig_password;
@@ -87,11 +94,11 @@ class Loader {
 		
 		if (is_null($conn)) {
 			$data = array(
-				'hostname' => $host,
-				'username' => $user,
-				'password' => $pass,
-				'database' => $dbnm,
-				'port' => $port
+				'hostname' 	=> $host,
+				'username' 	=> $user,
+				'password' 	=> $pass,
+				'database' 	=> $dbnm,
+				'port' 			=> $port
 			);
 			
 			// include driver di setting
@@ -174,6 +181,19 @@ class Loader {
 	 */
 	public function lib($param) {
 		return $this->load_lib($param);
+	}
+
+	/**
+	 * __get method
+	 * @param  string $name nama property
+	 * @return mixed       isi property
+	 */
+	public function __get($name) {
+		if ( ! isset($this->$name)) {
+			trigger_error('Undefined property ' . $name, E_USER_NOTICE);
+			$this->app->halt(500, 'User Noticed');
+		}
+		return $this->$name;
 	}
 
 	/**
