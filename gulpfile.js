@@ -23,6 +23,7 @@ gulp.task('bower', function() {
 	gulp.src([
 		'bower_components/jquery/dist/jquery.min.js',
 		'bower_components/bootstrap/dist/js/bootstrap.min.js',
+		'bower_components/angular/angular.min.js'
 	]).
 		pipe(flatten()).pipe(gulp.dest('./js'));
 
@@ -51,7 +52,27 @@ gulp.task('bower', function() {
 	/**
 	 * concat css
 	 */
-	 
+});
+
+/** vendor non bower */
+gulp.task('vendor', function() {
+	/**
+	 * concat javascript
+	 */
+	gulp.src('vendor/**/*.js').
+		pipe(plumber()).
+		pipe(uglify()).
+		pipe(concat('vendor.min.js')).
+		pipe(gulp.dest('./js'));
+
+	/**
+	 * concat css
+	 */
+	gulp.src('vendor/**/*.css').
+		pipe(plumber()).
+		pipe(minify()).
+		pipe(concat('vendor.min.css')).
+		pipe(gulp.dest('./css'));
 });
 
 /** compile scss in src */
@@ -84,11 +105,15 @@ gulp.task('html', function() {
 			'./css/custom.min.css'
 		], { read: false }))).
 		pipe(inject(gulp.src([
-			'./js/jquery.min.js'
+			'./js/jquery.min.js',
+			'./js/angular.min.js'
 		], { read: false }), { starttag: '<!-- inject:head:{{ext}} -->' })).
 		pipe(inject(gulp.src([
-			'./js/*.js', 
-			'!./js/jquery.min.js'
+			// './js/*.js', 
+			// '!./js/jquery.min.js',
+			// './js/custom.min.js'
+			'./js/!(custom|jquery|angular)*.min.js',
+			'./js/custom.min.js'
 		], { read: false }))).
 		pipe(flatten()).
 		pipe(gulp.dest('./view')).
