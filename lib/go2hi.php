@@ -1,4 +1,5 @@
 <?php
+namespace Lib;
 
 /**************************************************************************
  * GO2HI - Gregorian To Hijri Converter

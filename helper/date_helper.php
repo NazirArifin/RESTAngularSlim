@@ -8,13 +8,8 @@ if ( ! function_exists('format_date')) {
 	 * @return string     hasil perubahan string
 	 */
 	function format_date($f , $t = 0, $h = FALSE) {
-		global $ctr;
-		if ( ! is_numeric($t))
-			$t = 0;
-		
-		if ( ! class_exists('go2hi'))
-			$ctr->load('file', 'lib/go2hi.php');
-		$i = new go2hi;
+		if ( ! is_numeric($t)) $t = time();
+		$i = new \Lib\go2hi;
 		return $i->date($f, ($h === FALSE ? GO2HI_GREG : GO2HI_HIJRI), $t, 1);
 	}
 }
