@@ -15,59 +15,65 @@ var gulp  = require('gulp'),
 	filter = require('gulp-filter'),
 	livereload = require('gulp-livereload');
 
-/** vendor bower */
-gulp.task('bower', function() {
-	/**
-	 * copy javascript
-	 */
-	gulp.src([
+
+/** CONFIGURATION */
+// copy files from bower
+var bower = {
+	js: [
 		'bower_components/jquery/dist/jquery.min.js',
 		'bower_components/bootstrap/dist/js/bootstrap.min.js',
 		'bower_components/angular/angular.min.js'
-	]).
-		pipe(flatten()).pipe(gulp.dest('./js'));
-
-	/**
-	 * copy css
-	 */
-	gulp.src([
+	],
+	css: [
 		'bower_components/bootstrap/dist/css/bootstrap.min.css',
 		'bower_components/font-awesome/css/font-awesome.min.css',
-	]).
-		pipe(flatten()).pipe(gulp.dest('./css'));
+	],
+	fonts: [
+	'bower_components/bootstrap/fonts/*.*',
+	'bower_components/font-awesome/fonts/*.*',
+	] 
+}
 
-	/**
-	 * copy fonts
-	 */
-	gulp.src([
-		'bower_components/bootstrap/fonts/*.*',
-		'bower_components/font-awesome/fonts/*.*',
-	]).
-		pipe(flatten()).pipe(gulp.dest('./fonts'));
+// html inject
+var htmlInject = {
+	css: [
+		'./css/!(custom)*.css',
+		'./css/custom.min.css'
+	],
+	jsHead: [
+		'./js/jquery.min.js',
+		'./js/angular.min.js'
+	],
+	js: [
+		'./js/!(custom|jquery|angular)*.js',
+		'./js/custom.min.js'
+	]
+};
 
-	/**
-	 * concat javascript
-	 */
-	
-	/**
-	 * concat css
-	 */
+// file php yang diwatch
+var phpSrc = [
+	'./controller/**/*.php', 
+	'./model/**/*.php'
+];
+
+/** END CONFIGURATION */
+
+
+/** vendor bower */
+gulp.task('bower', function() {
+	gulp.src(bower.js).pipe(flatten()).pipe(gulp.dest('./js'));
+	gulp.src(bower.css).pipe(flatten()).pipe(gulp.dest('./css'));
+	gulp.src(bower.fonts).pipe(flatten()).pipe(gulp.dest('./fonts'));
 });
 
 /** vendor non bower */
 gulp.task('vendor', function() {
-	/**
-	 * concat javascript
-	 */
 	gulp.src('vendor/**/*.js').
 		pipe(plumber()).
 		pipe(uglify()).
 		pipe(concat('vendor.min.js')).
 		pipe(gulp.dest('./js'));
 
-	/**
-	 * concat css
-	 */
 	gulp.src('vendor/**/*.css').
 		pipe(plumber()).
 		pipe(minify({ keepSpecialComments: 0 })).
@@ -100,21 +106,9 @@ gulp.task('js', ['html'], function() {
 /** copy html in src to view */
 gulp.task('html', function() {
 	return gulp.src('./src/**/*.html').
-		pipe(inject(gulp.src([
-			'./css/!(custom)*.min.css',
-			'./css/custom.min.css'
-		], { read: false }))).
-		pipe(inject(gulp.src([
-			'./js/jquery.min.js',
-			'./js/angular.min.js'
-		], { read: false }), { starttag: '<!-- inject:head:{{ext}} -->' })).
-		pipe(inject(gulp.src([
-			// './js/*.js', 
-			// '!./js/jquery.min.js',
-			// './js/custom.min.js'
-			'./js/!(custom|jquery|angular)*.min.js',
-			'./js/custom.min.js'
-		], { read: false }))).
+		pipe(inject(gulp.src(htmlInject.css, { read: false }))).
+		pipe(inject(gulp.src(htmlInject.jsHead, { read: false }), { starttag: '<!-- inject:head:{{ext}} -->' })).
+		pipe(inject(gulp.src(htmlInject.js, { read: false }))).
 		pipe(flatten()).
 		pipe(gulp.dest('./view')).
 		pipe(livereload());
@@ -122,11 +116,8 @@ gulp.task('html', function() {
 
 /** watch php file in controller and model */
 gulp.task('php', function() {
-	return gulp.src(['./controller/**/*.php', './model/**/*.php'], { read: false }).
-		pipe(watch([
-			'./controller/**/*.php', 
-			'./model/**/*.php'
-		])).
+	return gulp.src(phpSrc, { read: false }).
+		pipe(watch(phpSrc)).
 		pipe(livereload());
 });
 
