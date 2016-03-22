@@ -11,9 +11,9 @@ Bootstrap aplikasi berbasis __REST__ menggunakan komponen:
   * [Firebase PHP JWT](https://github.com/firebase/php-jwt) - JSON based token
 
 ## Instalasi
-- Install PHP
+- Install PHP (bisa gunakan [XAMPP](https://www.apachefriends.org/download.html) yang berisi satu paket Apache, MySQL, PHP dan Perl). 
 - Install [node.js](https://nodejs.org/)
-- Instal [gulp](gulpjs.com/) dan [bower](http://bower.io/) secara global dengan perintah:
+- Instal [gulp](gulpjs.com/) dan [bower](http://bower.io/) secara global dengan perintah (jika menjalankan dari cmd acuhkan tanda $ di depan perintah):
 ```sh
 $ npm install -g gulp
 $ npm install -g bower
