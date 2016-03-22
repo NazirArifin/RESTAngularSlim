@@ -5,7 +5,7 @@ var gulp  = require('gulp'),
 	uglify = require('gulp-uglify'),
 	gutil = require('gulp-util'),
 	plumber = require('gulp-plumber'),
-	minify = require('gulp-minify-css'),
+	minify = require('gulp-clean-css'),
 	sass = require('gulp-sass'),
 	prefixer = require('gulp-autoprefixer'),
 	sourcemaps = require('gulp-sourcemaps'),
@@ -70,7 +70,7 @@ gulp.task('vendor', function() {
 	 */
 	gulp.src('vendor/**/*.css').
 		pipe(plumber()).
-		pipe(minify()).
+		pipe(minify({ keepSpecialComments: 0 })).
 		pipe(concat('vendor.min.css')).
 		pipe(gulp.dest('./css'));
 });
@@ -82,7 +82,7 @@ gulp.task('sass', ['html'], function() {
 		pipe(sass()).
 		pipe(prefixer({ browser: ['> 1%'], cascade: false })).
 		pipe(concat('custom.min.css')).
-		pipe(minify()).
+		pipe(minify({ keepSpecialComments: 0 })).
 		pipe(gulp.dest('./css')).
 		pipe(livereload());
 });

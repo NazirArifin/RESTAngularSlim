@@ -22,7 +22,7 @@
   	"gulp-sourcemaps": "latest",
   	"gulp-concat": "latest",
   	"gulp-uglify": "latest",
-  	"gulp-minify-css": "latest",
+  	"gulp-clean-css": "latest",
   	"gulp-sass": "latest",
   	"gulp-autoprefixer": "latest",
     "gulp-plumber": "latest",
