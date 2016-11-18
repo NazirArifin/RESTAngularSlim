@@ -23,7 +23,7 @@ class ModelBase {
 		$r = array();
 		foreach ($d as $val) {
 			$value = $this->loader->app->request->post($val);
-			if ( ! is_null($value)) {
+			if (is_null($value)) {
 				$r[$val] = '';
 			} else {
 				$r[$val] = $value;
@@ -39,7 +39,7 @@ class ModelBase {
 		$r = array();
 		foreach ($d as $val) {
 			$value = $this->loader->app->request->get($val);
-			if ( ! is_null($value)) {
+			if (is_null($value)) {
 				$r[$val] = '';
 			} else {
 				$r[$val] = $value;
@@ -52,7 +52,7 @@ class ModelBase {
 		$r = array();
 		foreach ($d as $val) {
 			$value = $this->loader->app->request->put($val);
-			if ( ! is_null($value)) {
+			if (is_null($value)) {
 				$r[$val] = '';
 			} else {
 				$r[$val] = $value;
