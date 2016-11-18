@@ -3,16 +3,17 @@ namespace Model;
 
 class ModelBase {    
   protected $salt = '';
+  protected $loader = null;
 
   /**
 	 * Parent Constructor
 	 */
 	protected function __construct() { 
 		require_once 'lib/Loader.php';
-		$loader = \Lib\Loader::get_instance();
-		$this->salt = $loader->salt;
+		$this->loader = \Lib\Loader::get_instance();
+		$this->salt = $this->loader->salt;
 		if ( ! isset($this->db))
-			$this->db = $loader->database();
+			$this->db = $this->loader->database();
 	}
 	
 	/**
@@ -21,10 +22,11 @@ class ModelBase {
 	protected function prepare_post($d = array()) {
 		$r = array();
 		foreach ($d as $val) {
-			if ( ! isset($_POST[$val])) {
+			$value = $this->loader->app->request->post($val);
+			if ( ! is_null($value)) {
 				$r[$val] = '';
 			} else {
-				$r[$val] = $_POST[$val];
+				$r[$val] = $value;
 			}
 		}
 		return $r;
@@ -36,10 +38,24 @@ class ModelBase {
 	protected function prepare_get($d = array()) {
 		$r = array();
 		foreach ($d as $val) {
-			if ( ! isset($_GET[$val])) {
+			$value = $this->loader->app->request->get($val);
+			if ( ! is_null($value)) {
 				$r[$val] = '';
 			} else {
-				$r[$val] = $_GET[$val];
+				$r[$val] = $value;
+			}
+		}
+		return $r;
+	}
+
+	protected function prepare_put($d = array()) {
+		$r = array();
+		foreach ($d as $val) {
+			$value = $this->loader->app->request->put($val);
+			if ( ! is_null($value)) {
+				$r[$val] = '';
+			} else {
+				$r[$val] = $value;
 			}
 		}
 		return $r;
