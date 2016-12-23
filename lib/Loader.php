@@ -22,21 +22,14 @@ class Loader {
 		// set timezone
 		date_default_timezone_set($timezone);
 		
-		// twig template
-		require_once 'lib/Twig/Autoloader.php';
-		\Twig_Autoloader::register();
-		
-		$view = 'view' . ( ! empty($this->direktori) ? '/' . $this->direktori : '');
-		// cache atau tidak
-		if ($cache_view) {
-			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view), array(
-				'cache' => 'cache'
-			));
-		} else {
-			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view));
-		}
-		$twig =& $this->twig;
-		
+		// composer autoload
+		require 'vendor/autoload.php';
+
+		// blade parameter
+		require 'lib/MyBlade.php';
+		$this->blade = new \Lib\MyBlade('view', 'cache');
+		$blade =& $this->blade;
+
 		// router dengan Slim
 		require_once 'lib/Slim/Slim.php';
 		\Slim\Slim::registerAutoloader();
@@ -50,13 +43,17 @@ class Loader {
 		$ctr = $this;
 		
 		// custom 404
-		$this->app->notFound(function() use ($twig) {
-			print $twig->render('404.html', array());
+		$this->app->notFound(function() use ($blade) {
+			print $blade->view()->render('404.html');
 		});
 		
 		// auto load library
 		spl_autoload_register(function($class) {
-			require_once 'lib/' . str_replace('Lib\\', '', $class) . '.php';
+			$file = 'lib/' . str_replace('Lib\\', '', $class) . '.php';
+			if (is_file($file)) {
+				require_once $file;
+				clearstatcache();
+			}
 		});
 		
 		// load semua controller file
@@ -228,8 +225,11 @@ class Loader {
 	/**
 	 * Load View
 	 */
-	protected function load_view($v, $p) {
-		print $this->twig->render($v, $p);
+	protected function load_view($f, $v) {
+		if ( ! empty($v))
+			print $this->blade->view()->make($f, $v)->render();
+		else
+			print $this->blade->view()->make($f)->render();
 	}
 
 	/**
