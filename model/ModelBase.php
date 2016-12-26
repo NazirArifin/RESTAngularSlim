@@ -11,7 +11,7 @@ class ModelBase {
 	protected function __construct() { 
 		require_once 'lib/Loader.php';
 		$this->loader = \Lib\Loader::get_instance();
-		$this->salt = $this->loader->salt;
+		$this->salt = $this->loader->get_salt();
 		if ( ! isset($this->db))
 			$this->db = $this->loader->database();
 	}

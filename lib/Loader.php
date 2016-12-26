@@ -30,22 +30,26 @@ class Loader {
 		$this->blade = new \Lib\MyBlade('view', 'cache');
 		$blade =& $this->blade;
 
-		// router dengan Slim
-		require_once 'lib/Slim/Slim.php';
-		\Slim\Slim::registerAutoloader();
-		$this->app = new \Slim\Slim(
-			array(
-				'debug'	=> $debug
+		$this->app = new \Slim\App(array(
+			'settings' => array(
+				'displayErrorDetails' => $debug
 			)
-		);
+		));
+
 		$this->load('helper', 'controller');
 		$app =& $this->app;
 		$ctr = $this;
 		
 		// custom 404
-		$this->app->notFound(function() use ($blade) {
-			print $blade->view()->render('404.html');
-		});
+		$chandle = $this->app->getContainer();
+		$chandle['notFoundHandler'] = function($c) {
+			return function($request, $response) use($c) {
+				return $c['response']
+					->withStatus(404)
+					->withHeader('Content-Type', 'text/html')
+					->write(trim($this->load_view('404', array('request' => $request), false)));
+			};
+		};
 		
 		// auto load library
 		spl_autoload_register(function($class) {
@@ -71,6 +75,9 @@ class Loader {
 	 * @var string
 	 */
 	private $salt = '';
+	public function get_salt() {
+		return $this->salt;
+	}
 	
 	/**
 	 * load database secara otomatis
@@ -125,7 +132,7 @@ class Loader {
 				$this->load_file($param);
 				break;
 			case 'view':
-				$this->load_view($param, $param2);
+				$this->load_view($param, $param2, true);
 				break;
 			case 'lib':
 				return $this->load_lib($param);
@@ -167,8 +174,8 @@ class Loader {
 	 * @param  array  $param data yang dilewatkan ke view
 	 * @return void
 	 */
-	public function view($view, $param) {
-		$this->load_view($view, $param);
+	public function view($view, $param = array(), $print = true) {
+		$this->load_view($view, $param, $print);
 	}
 
 	/**
@@ -178,19 +185,6 @@ class Loader {
 	 */
 	public function lib($param) {
 		return $this->load_lib($param);
-	}
-
-	/**
-	 * __get method
-	 * @param  string $name nama property
-	 * @return mixed       isi property
-	 */
-	public function __get($name) {
-		if ( ! isset($this->$name)) {
-			trigger_error('Undefined property ' . $name, E_USER_NOTICE);
-			$this->app->halt(500, 'User Noticed');
-		}
-		return $this->$name;
 	}
 
 	/**
@@ -223,13 +217,16 @@ class Loader {
 	}
 	
 	/**
-	 * Load View
+	 * load view
+	 * @param  [string] $f [file/path di view]
+	 * @param  array  	$v [parameter untuk view]
+	 * @param  [bool] 	$p [apakah di print]
+	 * @return [mixed]     [print langsung atau return string]
 	 */
-	protected function load_view($f, $v) {
-		if ( ! empty($v))
-			print $this->blade->view()->make($f, $v)->render();
-		else
-			print $this->blade->view()->make($f)->render();
+	protected function load_view($f, $v = array(), $p = true) {
+		$view = ( ! empty($v) ? $this->blade->view()->make($f, $v)->render() : $this->blade->view()->make($f)->render());
+		if ($p) print $view;
+		else return $view;
 	}
 
 	/**

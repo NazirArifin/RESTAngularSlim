@@ -1,5 +1,6 @@
 {
   "require": {
-    "philo/laravel-blade": "3.*"
+    "philo/laravel-blade": "3.*",
+    "slim/slim": "^3.0"
   }
 }
