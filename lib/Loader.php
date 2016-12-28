@@ -47,7 +47,15 @@ class Loader {
 				return $c['response']
 					->withStatus(404)
 					->withHeader('Content-Type', 'text/html')
-					->write(trim($this->load_view('404', array('request' => $request), false)));
+					->write(trim($this->load_view('404', array('request' => $request->getUri()->getPath()), false)));
+			};
+		};
+		$chandle['errorHandler'] = function($c) {
+			return function($request, $response, $exception) use($c) {
+				return $c['response']
+					->withStatus(500)
+					->withHeader('Content-Type', 'text/html')
+					->write($this->load_view('500', array('message' => $exception), false));
 			};
 		};
 		
@@ -145,8 +153,8 @@ class Loader {
 	 * @param  string $param nama model
 	 * @return array         hasil pembuatan model baru
 	 */
-	public function model($param) {
-		$m = $this->load_model($param);
+	public function model($param, $vars = array()) {
+		$m = $this->load_model($param, $vars);
 		$this->$m[0] = $m[1];
 	}
 
@@ -190,16 +198,16 @@ class Loader {
 	/**
 	 * Load model
 	 */
-	protected function load_model($m) {
+	protected function load_model($m, $vars = array()) {
 		$model = 'model/' . $m . '_model.php';
 		if ( ! is_file($model)) {
-			$this->app->halt(500, 'Cant load Model');
-			$this->app->stop();
+			throw new MyException("Error on loading model", 1);
 		}
 		require_once 'model/ModelBase.php';
 		require_once $model;
 		$class = '\\Model\\' . ucfirst($m) . 'Model';
-		return array(ucfirst($m) . 'Model', new $class);
+		if (empty($vars)) return array(ucfirst($m) . 'Model', new $class);
+		return array(ucfirst($m) . 'Model', new $class($vars));
 	}
 	
 	/**
