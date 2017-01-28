@@ -2,6 +2,6 @@
   "require": {
     "philo/laravel-blade": "3.*",
     "illuminate/database": "*",
-    "slim/slim": "^3.0"
+    "slim/slim": "2.*"
   }
 }

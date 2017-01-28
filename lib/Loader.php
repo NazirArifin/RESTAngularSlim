@@ -30,34 +30,24 @@ class Loader {
 		$this->blade = new \Lib\MyBlade('view', 'cache');
 		$blade =& $this->blade;
 
-		$this->app = new \Slim\App(array(
-			'settings' => array(
-				'displayErrorDetails' => $debug
+		$this->app = new \Slim\Slim(
+			array(
+				'debug'	=> $debug
 			)
-		));
+		);
 
 		$this->load('helper', 'controller');
 		$app =& $this->app;
 		$ctr = $this;
 		
 		// custom 404
-		$chandle = $this->app->getContainer();
-		$chandle['notFoundHandler'] = function($c) {
-			return function($request, $response) use($c) {
-				return $c['response']
-					->withStatus(404)
-					->withHeader('Content-Type', 'text/html')
-					->write(trim($this->load_view('404', array('request' => $request->getUri()->getPath()), false)));
-			};
-		};
-		$chandle['errorHandler'] = function($c) {
-			return function($request, $response, $exception) use($c) {
-				return $c['response']
-					->withStatus(500)
-					->withHeader('Content-Type', 'text/html')
-					->write($this->load_view('500', array('message' => $exception), false));
-			};
-		};
+		$this->app->notFound(function() {
+			print $this->load_view('404', array('request' => $_SERVER['REQUEST_URI']));
+		});
+		$this->app->error(function($e) {
+			print $this->load_view('500', array('message' => 'Something went WRONG!'));
+		});
+    
 		
 		// auto load library
 		spl_autoload_register(function($class) {
