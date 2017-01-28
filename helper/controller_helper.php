@@ -4,63 +4,56 @@
  * Dipanggil dari file Loader.php untuk persiapan file config/controller.php
  */
 
-if ( ! function_exists('get_request_query')) {
-	/**
-	 * mendapatkan data dari $_GET
-	 * @param  object 	$request 	object request dari slim
-	 * @param  string 	$key     	key value yang ingin dicari
-	 * @return mixed          		array atau string
-	 */
-	function get_request_query($request, $key = '') {
-		$get = $request->getQueryParams();
-		if ( ! empty($key)) {
-			return ( ! isset($get[$key]) ? '' : $get[$key]);
-		} else return $get;
-	}
+// ----------------------------------------------------------------
+/**
+ * Halt app dengan header 400 (Bad Request)
+ */
+function halt400($app) {
+	$app->halt(400);
+	$app->stop();
+}
+ 
+/**
+ * Halt app dengan header 401 (Unauthorized)
+ */
+function halt401($app) {
+	$app->halt(401);
+	$app->stop();
 }
 
-if ( ! function_exists('get_request_body')) {
-	/**
-	 * mendapatkan nilai dari $_POST / $_PUT
-	 * @param  object 	$request 	object request dari slim
-	 * @param  string 	$key     	key value yang ingin dicari
-	 * @return mixed          		array atau string
-	 */
-	function get_request_body($request, $key = '') {
-		$postput = $request->getParsedBody();
-		if ( ! empty($key)) {
-			return ( ! isset($postput[$key]) ? '' : $postput[$key]);
-		} else return $postput;
-	}
+/*
+ * Halt app dengan header 403 (Forbidden)
+ */
+function halt403($app) {
+	$app->halt(403);
+	$app->stop();
 }
 
-if ( ! function_exists('redirect')) {
-	/**
-	 * redirect url dengan slim
-	 * @param  object 	object respon dari slim
-	 * @param  string 	$url url tujuan
-	 * @return object     
-	 */
-	function redirect($res, $url) {
-		return $res->withStatus(302)->withHeader('Location', $url);
-	}
+/**
+ * Halt app dengan header 404 (Not Found)
+ */
+function halt404($app) {
+	$app->halt(404);
+	$app->stop();
+}
+ 
+/**
+ * menghasilkan output json ke browser
+ * @param  object $app  instance dari aplikasi
+ * @param  mixed $data   data yang akan dijadikan json
+ * @return void
+ */
+function json_output($app, $data) {
+	$app->contentType('application/json');
+	echo json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 }
 
-if ( ! function_exists('exit_app')) {
-	/**
-	 * sama dengan halt di slim 2
-	 * @param  object 	$response 	object respon dari slim
-	 * @param  string 	$status   	status keluar
-	 * @param  string 	$message 		pesan keluar
-	 * @return object   
-	 */
-	function exit_app($response, $status = 404, $message = '') {
-		$ctr = \Lib\Loader::get_instance();
-		if ($status == 404) {
-			return $response->withStatus(404)->withHeader('Content-Type', 'text/html')->write($this->load_view('404', array('request' => $request->getUri()->getPath()), false));
-		} else {
-			return $response->withStatus(500)->withHeader('Content-Type', 'text/html')->write($ctr->view('500', array('message' => $message), false));
-		}
-	}
-}
-
+/**
+ * autentifikasi menggunakan middleware
+ * @param  obj 		$app slim app instance
+ * @param  obj 		$ctr controller instance
+ * @return boolean      sukses atau gagal autentifikasi
+ */
+function authenticate($app, $ctr) {
+	
+};

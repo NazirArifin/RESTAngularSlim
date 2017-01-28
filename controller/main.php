@@ -8,8 +8,8 @@ $app->get('/', function() use($app, $ctr) {
   
 });
 
-$app->get('/hello/{name}', function($request, $response, $args) use($app, $ctr) {
+$app->get('/hello/:name', function($name) use($app, $ctr) {
 
-  $ctr->model('main', get_request_query($request));
+  echo 'Hello ', $name;
 
 });
