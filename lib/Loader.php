@@ -22,41 +22,40 @@ class Loader {
 		// set timezone
 		date_default_timezone_set($timezone);
 		
-		// twig template
-		require_once 'lib/Twig/Autoloader.php';
-		\Twig_Autoloader::register();
-		
-		$view = 'view' . ( ! empty($this->direktori) ? '/' . $this->direktori : '');
-		// cache atau tidak
-		if ($cache_view) {
-			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view), array(
-				'cache' => 'cache'
-			));
-		} else {
-			$this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem($view));
-		}
-		$twig =& $this->twig;
-		
-		// router dengan Slim
-		require_once 'lib/Slim/Slim.php';
-		\Slim\Slim::registerAutoloader();
+		// composer autoload
+		require 'vendor/autoload.php';
+
+		// blade parameter
+		require 'lib/MyBlade.php';
+		$this->blade = new \Lib\MyBlade('view', 'cache');
+		$blade =& $this->blade;
+
 		$this->app = new \Slim\Slim(
 			array(
 				'debug'	=> $debug
 			)
 		);
+
 		$this->load('helper', 'controller');
 		$app =& $this->app;
 		$ctr = $this;
 		
 		// custom 404
-		$this->app->notFound(function() use ($twig) {
-			print $twig->render('404.html', array());
+		$this->app->notFound(function() {
+			print $this->load_view('404', array('request' => $_SERVER['REQUEST_URI']));
 		});
+		$this->app->error(function($e) {
+			print $this->load_view('500', array('message' => 'Something went WRONG!'));
+		});
+    
 		
 		// auto load library
 		spl_autoload_register(function($class) {
-			require_once 'lib/' . str_replace('Lib\\', '', $class) . '.php';
+			$file = 'lib/' . str_replace('Lib\\', '', $class) . '.php';
+			if (is_file($file)) {
+				require_once $file;
+				clearstatcache();
+			}
 		});
 		
 		// load semua controller file
@@ -74,6 +73,9 @@ class Loader {
 	 * @var string
 	 */
 	private $salt = '';
+	public function get_salt() {
+		return $this->salt;
+	}
 	
 	/**
 	 * load database secara otomatis
@@ -128,7 +130,7 @@ class Loader {
 				$this->load_file($param);
 				break;
 			case 'view':
-				$this->load_view($param, $param2);
+				$this->load_view($param, $param2, true);
 				break;
 			case 'lib':
 				return $this->load_lib($param);
@@ -141,8 +143,8 @@ class Loader {
 	 * @param  string $param nama model
 	 * @return array         hasil pembuatan model baru
 	 */
-	public function model($param) {
-		$m = $this->load_model($param);
+	public function model($param, $vars = array()) {
+		$m = $this->load_model($param, $vars);
 		$this->$m[0] = $m[1];
 	}
 
@@ -170,8 +172,8 @@ class Loader {
 	 * @param  array  $param data yang dilewatkan ke view
 	 * @return void
 	 */
-	public function view($view, $param) {
-		$this->load_view($view, $param);
+	public function view($view, $param = array(), $print = true) {
+		$this->load_view($view, $param, $print);
 	}
 
 	/**
@@ -184,31 +186,18 @@ class Loader {
 	}
 
 	/**
-	 * __get method
-	 * @param  string $name nama property
-	 * @return mixed       isi property
-	 */
-	public function __get($name) {
-		if ( ! isset($this->$name)) {
-			trigger_error('Undefined property ' . $name, E_USER_NOTICE);
-			$this->app->halt(500, 'User Noticed');
-		}
-		return $this->$name;
-	}
-
-	/**
 	 * Load model
 	 */
-	protected function load_model($m) {
+	protected function load_model($m, $vars = array()) {
 		$model = 'model/' . $m . '_model.php';
 		if ( ! is_file($model)) {
-			$this->app->halt(500, 'Cant load Model');
-			$this->app->stop();
+			throw new MyException("Error on loading model", 1);
 		}
 		require_once 'model/ModelBase.php';
 		require_once $model;
 		$class = '\\Model\\' . ucfirst($m) . 'Model';
-		return array(ucfirst($m) . 'Model', new $class);
+		if (empty($vars)) return array(ucfirst($m) . 'Model', new $class);
+		return array(ucfirst($m) . 'Model', new $class($vars));
 	}
 	
 	/**
@@ -226,10 +215,16 @@ class Loader {
 	}
 	
 	/**
-	 * Load View
+	 * load view
+	 * @param  [string] $f [file/path di view]
+	 * @param  array  	$v [parameter untuk view]
+	 * @param  [bool] 	$p [apakah di print]
+	 * @return [mixed]     [print langsung atau return string]
 	 */
-	protected function load_view($v, $p) {
-		print $this->twig->render($v, $p);
+	protected function load_view($f, $v = array(), $p = true) {
+		$view = ( ! empty($v) ? $this->blade->view()->make($f, $v)->render() : $this->blade->view()->make($f)->render());
+		if ($p) print $view;
+		else return $view;
 	}
 
 	/**

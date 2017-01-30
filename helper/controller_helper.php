@@ -21,7 +21,7 @@ function halt401($app) {
 	$app->stop();
 }
 
-/**
+/*
  * Halt app dengan header 403 (Forbidden)
  */
 function halt403($app) {
