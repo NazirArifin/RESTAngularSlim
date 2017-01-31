@@ -30,6 +30,7 @@
     "gulp-flatten": "latest",
     "gulp-inject": "latest",
     "gulp-filter": "latest",
-    "gulp-watch": "latest"
+    "gulp-watch": "latest",
+    "gulp-minify-inline": "latest"
   }
 }

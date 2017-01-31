@@ -13,6 +13,7 @@ var gulp  = require('gulp'),
 	watch = require('gulp-watch'),
 	inject = require('gulp-inject'),
 	filter = require('gulp-filter'),
+  minifyInline = require('gulp-minify-inline'),
 	livereload = require('gulp-livereload');
 
 
@@ -110,6 +111,7 @@ gulp.task('html', function() {
 		pipe(inject(gulp.src(htmlInject.jsHead, { read: false }), { starttag: '<!-- inject:head:{{ext}} -->' })).
 		pipe(inject(gulp.src(htmlInject.js, { read: false }))).
 		pipe(flatten()).
+    pipe(minifyInline()).
 		pipe(gulp.dest('./view')).
 		pipe(livereload());
 });
