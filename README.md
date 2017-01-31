@@ -3,7 +3,7 @@
 Bootstrap aplikasi berbasis __REST__ menggunakan komponen:
 
   * [SlimFramework](http://www.slimframework.com/) - Slim Framework
-  * [Twig](http://twig.sensiolabs.org/) - PHP Templating
+  * [Blade] (https://github.com/PhiloNL/Laravel-Blade) - PHP Templating
   * [jQuery](https://jquery.com/)
   * [Twitter Bootstrap](http://getbootstrap.com/) - CSS Framework
   * [AngularJS](https://angularjs.org/)
@@ -18,16 +18,21 @@ Bootstrap aplikasi berbasis __REST__ menggunakan komponen:
 $ npm install -g gulp
 $ npm install -g bower
 ```
+- Instal [composer]()
 - Download atau clone repository ini dengan perintah:
 ```sh
 $ git clone git@github.com:NazirArifin/TwistAngular.git
 ```
-- Pindahkan file dalam folder ke __htdocs__, pastikan bahwa file __index.php__, __package.json__, __gulpfile.js__ dsb berada di folder root.
+- Pindahkan file ke web server, pastikan bahwa file __index.php__, __package.json__, __gulpfile.js__ dsb berada di folder root.
 - Install _dependency_ gulp dengan perintah:
 ```sh
 $ npm install
 ```
-- Install jQuery, bootstrap dan FontAwesome menggunakan bower dan memindahkan filenya ke folder css dan js
+- Install _dependency_ composer dengan perintah:
+```sh
+$ composer install
+```
+- Install jQuery, bootstrap dan FontAwesome menggunakan bower dan memindahkan filenya ke folder css dan js dengan gulp
 ```sh
 $ bower install
 $ gulp bower
@@ -37,7 +42,7 @@ $ gulp bower
 ```sh
 $ gulp
 ```
-- Buka browser dan akses __localhost__ dan pastikan muncul pesan sukses di layar browser. Untuk meng-_enable_-kan livereload pastikan icon livereload di pojok kanan atas browser tengahnya berwarna gelap (klik icon jika tengahnya masih berwarna terang)
+- Buka browser dan akses web server dan pastikan muncul pesan sukses di layar browser. Untuk meng-_enable_-kan livereload pastikan icon livereload di pojok kanan atas browser tengahnya berwarna gelap (klik icon jika tengahnya masih berwarna terang)
 
 ## Tutorial
 - Tutorial selengkapnya masih akan dikerjakan :D
