@@ -1,42 +1,22 @@
-/* File: gulpfile.js */
-
-var gulp  = require('gulp'),
-	concat = require('gulp-concat'),
-	uglify = require('gulp-uglify'),
-	gutil = require('gulp-util'),
-	plumber = require('gulp-plumber'),
-	minify = require('gulp-clean-css'),
-	sass = require('gulp-sass'),
-	prefixer = require('gulp-autoprefixer'),
-	sourcemaps = require('gulp-sourcemaps'),
-	flatten = require('gulp-flatten'),
-	watch = require('gulp-watch'),
-	inject = require('gulp-inject'),
-	filter = require('gulp-filter'),
-  minifyInline = require('gulp-minify-inline'),
-	livereload = require('gulp-livereload');
-
+const { src, dest, parallel, watch, series } = require('gulp');
+const concat = require('gulp-concat');
+const cache = require('gulp-cached');
+const babel = require('gulp-babel');
+const uglify = require('gulp-uglify');
+const plumber = require('gulp-plumber');
+const minify = require('gulp-clean-css');
+const sass = require('gulp-sass');
+const prefixer = require('gulp-autoprefixer');
+const sourcemaps = require('gulp-sourcemaps');
+const flatten = require('gulp-flatten');
+const inject = require('gulp-inject');
+const minifyInline = require('gulp-minify-inline');
+const htmlmin = require('gulp-htmlmin');
+const browserSync = require('browser-sync').create();
 
 /** CONFIGURATION */
-// copy files from bower
-var bower = {
-	js: [
-		'bower_components/jquery/dist/jquery.min.js',
-		'bower_components/bootstrap/dist/js/bootstrap.min.js',
-		'bower_components/angular/angular.min.js'
-	],
-	css: [
-		'bower_components/bootstrap/dist/css/bootstrap.min.css',
-		'bower_components/font-awesome/css/font-awesome.min.css',
-	],
-	fonts: [
-	'bower_components/bootstrap/fonts/*.*',
-	'bower_components/font-awesome/fonts/*.*',
-	] 
-}
-
 // html inject
-var htmlInject = {
+const htmlInject = {
 	css: [
 		'./css/!(custom)*.css',
 		'./css/custom.min.css'
@@ -52,95 +32,104 @@ var htmlInject = {
 };
 
 // file php yang diwatch
-var phpSrc = [
+const phpSrc = [
 	'./controller/**/*.php', 
 	'./model/**/*.php'
 ];
 
 /** END CONFIGURATION */
 
+function vendorJS() {
+  return src('vendor_public/**/*.js')
+    .pipe(plumber())
+    .pipe(uglify())
+    .pipe(concat('vendor.min.js'))
+    .pipe(dest('js'));
+}
+function vendorCSS() {
+  return src('vendor_public/**/*.css')
+    .pipe(plumber())
+    .pipe(minify())
+    .pipe(concat('vendor.min.css'))
+    .pipe(dest('css'));
+}
 
-/** vendor bower */
-gulp.task('bower', function() {
-	gulp.src(bower.js).pipe(flatten()).pipe(gulp.dest('./js'));
-	gulp.src(bower.css).pipe(flatten()).pipe(gulp.dest('./css'));
-	gulp.src(bower.fonts).pipe(flatten()).pipe(gulp.dest('./fonts'));
-});
+/** CSS */
+function css() {
+  return src('src/**/*.scss')
+    .pipe(plumber())
+    .pipe(sourcemaps.init({ largeFile: true }))
+    .pipe(sass())
+    .pipe(prefixer({ browsers: ['> 1%'], cascade: false }))
+    .pipe(concat('custom.min.css'))
+    .pipe(minify())
+    .pipe(sourcemaps.write('sourcemaps'))
+    .pipe(dest('css'))
+    .pipe(browserSync.stream());
+}
+function watchCss() {
+  watch('src/**/*.scss', { ignoreInitial: false }, css);
+}
 
-/** vendor non bower */
-gulp.task('vendor', function() {
-	gulp.src('vendor/**/*.js').
-		pipe(plumber()).
-		pipe(uglify()).
-		pipe(concat('vendor.min.js')).
-		pipe(gulp.dest('./js'));
+/** JS */
+function js() {
+  return src('src/**/*.js')
+    .pipe(plumber())
+    .pipe(babel({ presets: ['es2015'] }))
+    .pipe(sourcemaps.init({ largeFile: true }))
+    .pipe(concat('custom.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('sourcemaps'))
+    .pipe(dest('js'))
+    .pipe(browserSync.stream());
+}
+function watchJs() {
+  watch('src/**/*.js', { ignoreInitial: false }, js);
+}
 
-	gulp.src('vendor/**/*.css').
-		pipe(plumber()).
-		pipe(minify({ keepSpecialComments: 0 })).
-		pipe(concat('vendor.min.css')).
-		pipe(gulp.dest('./css'));
-});
+/** HTML */
+function html() {
+  return src('src/**/*.html')
+    .pipe(cache('html'))
+    .pipe(
+      inject(
+        src(htmlInject.css, { read: false, allowEmpty: true }), { quiet: true }
+      )
+    )
+    .pipe(
+      inject(
+        src(htmlInject.jsHead, { read: false, allowEmpty: true }), { quiet: true, starttag: '<!-- inject:head:{{ext}} -->' }
+      )
+    )
+    .pipe(
+      inject(
+        src(htmlInject.js, { read: false, allowEmpty: true }), { quiet: true }
+      )
+    )
+    .pipe(minifyInline())
+    .pipe(htmlmin({
+      collapseWhitespace: true,
+      removeComments: true
+    }))
+    .pipe(flatten())
+    .pipe(dest('view'))
+    .pipe(browserSync.stream());
+}
+function watchHtml() {
+  watch('src/**/*.html', { ignoreInitial: false }, html);
+}
 
-/** compile scss in src */
-gulp.task('sass', ['html'], function() {
-	return gulp.src('./src/**/*.scss').
-		pipe(plumber()).
-		pipe(sass()).
-		pipe(prefixer({ browser: ['> 1%'], cascade: false })).
-		pipe(concat('custom.min.css')).
-		pipe(minify({ keepSpecialComments: 0 })).
-		pipe(gulp.dest('./css')).
-		pipe(livereload());
-});
+function browserSyncInit() {
+  browserSync.init({
+    proxy: '127.0.0.1:8181',
+    baseDir: './',
+    port: 5000,
+    open: true,
+    notify: false
+  });
+}
 
-/** concat and minify js in src */
-gulp.task('js', ['html'], function() {
-	return gulp.src('./src/**/*.js').
-		pipe(plumber()).
-		pipe(uglify()).
-		pipe(concat('custom.min.js')).
-		pipe(gulp.dest('./js')).
-		pipe(livereload());
-});
-
-/** copy html in src to view */
-gulp.task('html', function() {
-	return gulp.src('./src/**/*.html').
-		pipe(inject(gulp.src(htmlInject.css, { read: false }))).
-		pipe(inject(gulp.src(htmlInject.jsHead, { read: false }), { starttag: '<!-- inject:head:{{ext}} -->' })).
-		pipe(inject(gulp.src(htmlInject.js, { read: false }))).
-		pipe(flatten()).
-    pipe(minifyInline()).
-		pipe(gulp.dest('./view')).
-		pipe(livereload());
-});
-
-/** watch php file in controller and model */
-gulp.task('php', function() {
-	return gulp.src(phpSrc, { read: false }).
-		pipe(watch(phpSrc)).
-		pipe(livereload());
-});
-
-/** watch task */
-gulp.task('watch', function() {
-	livereload.listen({ quiet: true });
-	// livereload.listen({ quiet: false });
-	
-	// gulp-watch js and css changes then update html for inject
-	gulp.src(['js/*.js', 'css/*.css'], { read: false }).
-		pipe(watch(['js/*.js', 'css/*.css'], function() { gulp.start('html'); }));
-	// gulp-watch untuk js
-	gulp.src('src/**/*.js', { read: false }).
-		pipe(watch('src/**/*.js', function() { gulp.start('js'); }));
-	// gulp-watch untuk html
-	gulp.src('src/**/*.html', { read: false }).
-		pipe(watch('src/**/*.html', function() { gulp.start('html'); }));
-	// gulp-watch untuk sass
-	gulp.src('src/**/*.scss', { read: false }).
-		pipe(watch('src/**/*.scss', function() { gulp.start('sass'); }));
-});
-
-/** default task */
-gulp.task('default', ['php', 'html', 'js', 'sass', 'watch']);
+exports.vendor = parallel(vendorCSS, vendorJS);
+exports.default = parallel(
+  watchJs, watchCss, watchHtml, browserSyncInit
+);

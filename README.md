@@ -5,18 +5,15 @@ Bootstrap aplikasi berbasis __REST__ menggunakan komponen:
   * [SlimFramework](http://www.slimframework.com/) - Slim Framework
   * [Blade] (https://github.com/PhiloNL/Laravel-Blade) - PHP Templating
   * [jQuery](https://jquery.com/)
-  * [Twitter Bootstrap](http://getbootstrap.com/) - CSS Framework
-  * [AngularJS](https://angularjs.org/)
   * [Font-Awesome](https://fortawesome.github.io/Font-Awesome/)
   * [Firebase PHP JWT](https://github.com/firebase/php-jwt) - JSON based token
 
 ## Instalasi
 - Instal PHP (bisa gunakan [XAMPP](https://www.apachefriends.org/download.html) yang berisi satu paket Apache, MySQL, PHP dan Perl). 
 - Instal [node.js](https://nodejs.org/)
-- Instal [gulp](gulpjs.com/) dan [bower](http://bower.io/) secara global dengan perintah (jika menjalankan dari cmd acuhkan tanda $ di depan perintah):
+- Instal [gulp](gulpjs.com/) secara global dengan perintah (jika menjalankan dari cmd acuhkan tanda $ di depan perintah):
 ```sh
 $ npm install -g gulp
-$ npm install -g bower
 ```
 - Instal [composer]()
 - Download atau clone repository ini dengan perintah:
@@ -32,17 +29,12 @@ $ npm install
 ```sh
 $ composer install
 ```
-- Install jQuery, bootstrap dan FontAwesome menggunakan bower dan memindahkan filenya ke folder css dan js dengan gulp
-```sh
-$ bower install
-$ gulp bower
-```
-- Untuk dapat menggunakan livereload, pasang atau install plugin [LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei) (Chrome).
+
+- Ubah file __gulpfile.js__ fungsi browserSyncInit() bagian proxy dan sesuaikan dengan server PHP Anda.
 - Jalankan perintah berikut ini setiap kali akan bekerja:
 ```sh
 $ gulp
 ```
-- Buka browser dan akses web server dan pastikan muncul pesan sukses di layar browser. Untuk meng-_enable_-kan livereload pastikan icon livereload di pojok kanan atas browser tengahnya berwarna gelap (klik icon jika tengahnya masih berwarna terang)
 
 ## Tutorial
 - Tutorial selengkapnya masih akan dikerjakan :D

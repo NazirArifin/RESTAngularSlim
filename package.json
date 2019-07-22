@@ -1,6 +1,6 @@
 {
   "name": "twistangular",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "boostrap rest service with twig, slim and angular",
   "main": "index.php",
   "repository": {
@@ -17,20 +17,24 @@
   },
   "homepage": "https://github.com/NazirArifin/TwistAngular#readme",
   "devDependencies": {
-    "gulp": "latest",
-  	"gulp-util": "latest",
-  	"gulp-sourcemaps": "latest",
-  	"gulp-concat": "latest",
-  	"gulp-uglify": "latest",
-  	"gulp-clean-css": "latest",
-  	"gulp-sass": "latest",
-  	"gulp-autoprefixer": "latest",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.22.0",
+    "browser-sync": "^2.26.5",
+    "gulp": "^4.0.1",
+    "gulp-sourcemaps": "latest",
+    "gulp-concat": "latest",
+    "gulp-uglify": "^3.0.1",
+    "gulp-clean-css": "latest",
+    "gulp-sass": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-babel": "^6.1.3",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-cached": "^1.1.1",
     "gulp-plumber": "latest",
-    "gulp-livereload": "latest",
     "gulp-flatten": "latest",
     "gulp-inject": "latest",
-    "gulp-filter": "latest",
-    "gulp-watch": "latest",
     "gulp-minify-inline": "latest"
   }
 }

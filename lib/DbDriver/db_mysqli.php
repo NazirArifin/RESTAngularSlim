@@ -2,9 +2,9 @@
 /**
  * Driver mysqli
  */
-namespace Lib;
+namespace Lib\DbDriver;
  
-class Db {
+class DbMysqli {
 	protected $conn_id,
 			$queries = array(),
 			$result_id,

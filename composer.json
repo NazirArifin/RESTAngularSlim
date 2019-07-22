@@ -1,7 +1,23 @@
 {
   "require": {
     "philo/laravel-blade": "3.*",
-    "illuminate/database": "*",
-    "slim/slim": "2.*"
+    "slim/slim": "2.*",
+    "nazir/go2hi": "^1.0",
+    "nazir/iofiles": "^1.0"
+  },
+  "require-dev": {},
+  "autoload": {
+    "classmap": [
+      "lib/",
+      "lib/DbDriver"
+    ],
+    "exclude-from-classmap": [
+      "lib/Loader.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-0": {
+      "tests": ""
+    }
   }
 }

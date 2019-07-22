@@ -145,7 +145,7 @@ class Loader {
 	 */
 	public function model($param, $vars = array()) {
 		$m = $this->load_model($param, $vars);
-		$this->$m[0] = $m[1];
+    $this->{$m[0]} = $m[1];
 	}
 
 	/**
